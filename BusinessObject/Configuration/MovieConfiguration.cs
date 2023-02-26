@@ -17,9 +17,9 @@ namespace BusinessObject.Configuration
 
             builder.Property(x => x.ReleaseDate).HasColumnType("date");
 
-            builder.Property(x => x.Duration).HasColumnType("date").IsRequired();
+            builder.Property(x => x.DurationInMinutes).IsRequired();
 
-            builder.Property(x => x.Description).HasMaxLength(50);
+            builder.Property(x => x.Image).IsRequired().HasColumnType("VARBINARY(MAX)");
 
             builder.Property(x => x.Country).HasMaxLength(50);
 
@@ -36,6 +36,7 @@ namespace BusinessObject.Configuration
                 .WithOne(a => a.Movie)
                 .HasForeignKey(x => x.MovieID)
                 .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
