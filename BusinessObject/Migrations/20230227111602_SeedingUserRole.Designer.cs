@@ -4,6 +4,7 @@ using BusinessObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(OnlineBookingTicketDbContext))]
-    partial class OnlineBookingTicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227111602_SeedingUserRole")]
+    partial class SeedingUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -414,7 +416,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppRoleClaims");
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -436,7 +438,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppUserClaims");
+                    b.ToTable("UserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -455,7 +457,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("ProviderKey", "LoginProvider");
 
-                    b.ToTable("AppUserLogins");
+                    b.ToTable("UserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -499,7 +501,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Name", "LoginProvider", "UserId");
 
-                    b.ToTable("AppUserTokens");
+                    b.ToTable("UserTokens");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Booking", b =>

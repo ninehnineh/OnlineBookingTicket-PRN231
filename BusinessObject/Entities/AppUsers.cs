@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.Entities
 {
-    public class AppUser : IdentityUser
+    public class AppUsers : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
