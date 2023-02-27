@@ -29,7 +29,7 @@ static IEdmModel GetEdmModel()
 builder.Services.AddDbContext<OnlineBookingTicketDbContext>( op => 
  op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+builder.Services.AddIdentity<AppUsers, IdentityRole>()
     .AddEntityFrameworkStores<OnlineBookingTicketDbContext>()
     .AddDefaultTokenProviders();
 

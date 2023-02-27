@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public class OnlineBookingTicketDbContext : IdentityDbContext<AppUser>
+    public class OnlineBookingTicketDbContext : IdentityDbContext<AppUsers>
     {
         public OnlineBookingTicketDbContext(DbContextOptions<OnlineBookingTicketDbContext> options) : base(options)
         {

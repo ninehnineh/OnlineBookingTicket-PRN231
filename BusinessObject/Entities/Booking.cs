@@ -10,7 +10,7 @@ namespace BusinessObject.Entities
         public int MovieShowID { get; set; }
         public MovieShow MovieShow { get; set; }
         public string AppUserID { get; set; }
-        public AppUser AppUser { get; set; }
+        public AppUsers AppUser { get; set; }
         public List<ShowSeat> ShowSeats { get; set; }
     }
 }

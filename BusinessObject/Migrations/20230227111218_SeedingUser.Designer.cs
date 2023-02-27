@@ -4,6 +4,7 @@ using BusinessObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(OnlineBookingTicketDbContext))]
-    partial class OnlineBookingTicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227111218_SeedingUser")]
+    partial class SeedingUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +86,7 @@ namespace BusinessObject.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ad286ba5-1f2d-438d-967b-d5af54dd11a6",
+                            ConcurrencyStamp = "94e6773a-b686-4eb0-98a7-314ed1c6a961",
                             Email = "Customer@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "System",
@@ -92,9 +94,9 @@ namespace BusinessObject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CUSTOMER@LOCALHOST.COM",
                             NormalizedUserName = "CUSTOMER@LOCALHOST.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEF6oekZwmZVX+Ci8YZujUsCXFc7splKKUZt9PLKSCPtmM+FE72uoCm2mkvgbVCEpTg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEkOLlQUJaKfU0f1X59neh5eU7/OOh/neEeBVJ3HS0J3PfJb6ZYYJ2b136BFNdH1TA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "05816665-e597-4a60-8c13-1a545216393c",
+                            SecurityStamp = "d24ae239-1774-4a83-a850-beb0e95a71b6",
                             TwoFactorEnabled = false,
                             UserName = "Customer@localhost.com"
                         },
@@ -102,7 +104,7 @@ namespace BusinessObject.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "171d3993-c1eb-4924-b54a-95b0251c94da",
+                            ConcurrencyStamp = "4f2b1fd8-43a5-49d5-b733-215089070522",
                             Email = "Manager@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "System",
@@ -110,9 +112,9 @@ namespace BusinessObject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER@LOCALHOST.COM",
                             NormalizedUserName = "MANAGER@LOCALHOST.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFpHNS9A8McaSYDJhN13l044L0EFp6tnkfca2lV9CzL2gd/rBeXuWNU76zDw2ulFFw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELQEYDvvTEJyyimozTGwlX2aFUZqhgALiG8FMPmTgu6zdGrxWHfnSiIlBjq83B2ihQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3631945d-086a-4265-8e3d-1396e2f86943",
+                            SecurityStamp = "719e7e53-be4c-454d-b642-89b36d3a0bdf",
                             TwoFactorEnabled = false,
                             UserName = "Manager@localhost.com"
                         });
@@ -376,23 +378,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            ConcurrencyStamp = "bee5166e-ade6-4d22-b616-6e8bc0b52cce",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            ConcurrencyStamp = "21167ed8-fbc4-4674-bc71-1d88d0d1a94b",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        });
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -414,7 +400,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppRoleClaims");
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -436,7 +422,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppUserClaims");
+                    b.ToTable("UserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -455,7 +441,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("ProviderKey", "LoginProvider");
 
-                    b.ToTable("AppUserLogins");
+                    b.ToTable("UserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -468,19 +454,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("RoleId", "UserId");
 
-                    b.ToTable("AppUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = "1",
-                            UserId = "1"
-                        },
-                        new
-                        {
-                            RoleId = "2",
-                            UserId = "2"
-                        });
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -499,7 +473,7 @@ namespace BusinessObject.Migrations
 
                     b.HasKey("Name", "LoginProvider", "UserId");
 
-                    b.ToTable("AppUserTokens");
+                    b.ToTable("UserTokens");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Booking", b =>
