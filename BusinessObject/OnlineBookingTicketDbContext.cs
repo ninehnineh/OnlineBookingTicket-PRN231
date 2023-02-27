@@ -1,4 +1,6 @@
 ﻿using BusinessObject.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public class OnlineBookingTicketDbContext : DbContext
+    public class OnlineBookingTicketDbContext : IdentityDbContext<AppUser>
     {
         public OnlineBookingTicketDbContext(DbContextOptions<OnlineBookingTicketDbContext> options) : base(options)
         {
@@ -17,6 +19,12 @@ namespace BusinessObject
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<IdentityUserClaim<string>>();
+            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(x => new { x.RoleId, x.UserId });
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(x => new { x.ProviderKey, x.LoginProvider });
+            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(x => new { x.Name, x.LoginProvider, x.UserId });
+            modelBuilder.Entity<IdentityRoleClaim<string>>();
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
