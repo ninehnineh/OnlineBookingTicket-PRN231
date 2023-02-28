@@ -2,6 +2,7 @@ using BusinessObject;
 using BusinessObject.Entities;
 using DataAccess.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,14 +11,18 @@ using Microsoft.OData.ModelBuilder;
 using Repository.IRepository;
 using Repository.Repository;
 using System.Text;
+using Repository.MovieRepository;
 
 static IEdmModel GetEdmModel()
 {
     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
     builder.EntitySet<Cinema>("Cinemas");
     builder.EntitySet<City>("Cities");
+    builder.EntitySet<Movie>("Movies");
     return builder.GetEdmModel();
 }
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +37,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig).Assembly);
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICinemaRepository,CinemaRepository>();
 builder.Services.AddScoped<ICityRepository,CityRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 // Add services to the container.
 builder.Services.AddCors(options => {
@@ -39,14 +45,20 @@ builder.Services.AddCors(options => {
         b => b.AllowAnyHeader()
             .AllowAnyOrigin()
             .AllowAnyMethod());
-
 });
 
-/*builder.Services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // "Bearer"
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options => {
-    options.TokenValidationParameters = new TokenValidationParameters
+
+builder.Services.AddIdentity<AppUsers, IdentityRole>()
+    .AddEntityFrameworkStores<OnlineBookingTicketDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(op =>
+{
+    op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         ValidateIssuer = true,
@@ -57,9 +69,12 @@ builder.Services.AddCors(options => {
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
     };
-});*/
+});
 
 builder.Services.AddControllers().AddOData(options => options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
