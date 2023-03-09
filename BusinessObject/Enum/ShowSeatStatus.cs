@@ -10,6 +10,8 @@ namespace BusinessObject.Enum
     {
         Full,
         AlmostFull,
-        Broken
+        Broken,
+        Empty,
+        Booked,
     }
 }
