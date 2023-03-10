@@ -19,6 +19,7 @@ static IEdmModel GetEdmModel()
     builder.EntitySet<Cinema>("Cinemas");
     builder.EntitySet<City>("Cities");
     builder.EntitySet<Movie>("Movies");
+    builder.EntitySet<CinemaHall>("CinemaHalls");
     return builder.GetEdmModel();
 }
 

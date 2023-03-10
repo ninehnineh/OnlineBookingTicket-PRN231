@@ -19,11 +19,11 @@ namespace Repository.Repository
         private readonly IMapper _mapper;
         private readonly CinemaHallDAO _cinemaHallDAO;
 
-        public CinemaHallRepository(OnlineBookingTicketDbContext context, IMapper mapper, CinemaHallDAO cinemaHallDAO)
+        public CinemaHallRepository(OnlineBookingTicketDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _cinemaHallDAO = cinemaHallDAO;
+            _cinemaHallDAO = new CinemaHallDAO(_context,_mapper);
         }
 
         public async Task<CinemaHall> AddCinemaHall(CreateCinemaHallDto cinemaHallDto)
