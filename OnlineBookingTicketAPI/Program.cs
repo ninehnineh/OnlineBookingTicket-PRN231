@@ -17,6 +17,10 @@ using Repository.CinemaHallRepository;
 using Repository.CinemaSeatRepository;
 using Repository.BookingRepository;
 using Repository.MovieShowRepository;
+using Microsoft.OpenApi.Models;
+using Repository.AuthenticationRepository;
+using DataAccess;
+using Microsoft.Extensions.Configuration;
 
 static IEdmModel GetEdmModel()
 {
@@ -37,6 +41,10 @@ static IEdmModel GetEdmModel()
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 
 builder.Services.AddDbContext<OnlineBookingTicketDbContext>(options => {
     options.UseSqlServer(connectionString);
@@ -53,7 +61,7 @@ builder.Services.AddScoped<ICinemaHallRepository, CinemaHallRepository>();
 builder.Services.AddScoped<ICinemaSeatRepository, CinemaSeatRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IMovieShowRepository, MovieShowRepository>();
-
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
 // Add services to the container.
 builder.Services.AddCors(options => {
@@ -67,6 +75,53 @@ builder.Services.AddCors(options => {
 builder.Services.AddIdentity<AppUsers, IdentityRole>()
     .AddEntityFrameworkStores<OnlineBookingTicketDbContext>()
     .AddDefaultTokenProviders();
+
+
+builder.Services.AddControllers().AddOData(options =>
+options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
+
+
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                Enter 'Bearer' [space] and then your token in the text input below.
+                \r\n\r\nExample: 'Bearer 12345avcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    },
+                    Scheme = "oauth2",
+                    Name = "Bearer",
+                    In = ParameterLocation.Header,
+                },
+                new List<string>()
+            }
+        });
+
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Final Project Api",
+    });
+});
 
 builder.Services.AddAuthentication(op =>
 {
@@ -86,16 +141,6 @@ builder.Services.AddAuthentication(op =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
     };
 });
-
-builder.Services.AddControllers().AddOData(options => options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
-
-
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen();
-
 
 
 var app = builder.Build();

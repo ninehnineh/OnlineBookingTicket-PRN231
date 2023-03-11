@@ -19,11 +19,11 @@ namespace BusinessObject
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<IdentityUserClaim<string>>();
-            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(x => new { x.RoleId, x.UserId });
-            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(x => new { x.ProviderKey, x.LoginProvider });
-            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(x => new { x.Name, x.LoginProvider, x.UserId });
-            modelBuilder.Entity<IdentityRoleClaim<string>>();
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims");
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("AppUserRoles").HasKey(x => new { x.RoleId, x.UserId });
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("AppUserLogins").HasKey(x => new { x.ProviderKey, x.LoginProvider });
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("AppUserTokens").HasKey(x => new { x.Name, x.LoginProvider, x.UserId });
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("AppRoleClaims");
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
