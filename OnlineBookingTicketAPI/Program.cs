@@ -12,6 +12,11 @@ using Repository.IRepository;
 using Repository.Repository;
 using System.Text;
 using Repository.MovieRepository;
+using Repository.ShowSeatRepository;
+using Repository.CinemaHallRepository;
+using Repository.CinemaSeatRepository;
+using Repository.BookingRepository;
+using Repository.MovieShowRepository;
 
 static IEdmModel GetEdmModel()
 {
@@ -19,6 +24,11 @@ static IEdmModel GetEdmModel()
     builder.EntitySet<Cinema>("Cinemas");
     builder.EntitySet<City>("Cities");
     builder.EntitySet<Movie>("Movies");
+    builder.EntitySet<ShowSeat>("ShowSeats");
+    builder.EntitySet<CinemaHall>("CinemaHalls");
+    builder.EntitySet<CinemaSeat>("CinemaSeats");
+    builder.EntitySet<Booking>("Bookings");
+    builder.EntitySet<MovieShow>("MovieShows");
     return builder.GetEdmModel();
 }
 
@@ -38,6 +48,12 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<ICinemaRepository,CinemaRepository>();
 builder.Services.AddScoped<ICityRepository,CityRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IShowSeatRepository, ShowSeatRepository>();
+builder.Services.AddScoped<ICinemaHallRepository, CinemaHallRepository>();
+builder.Services.AddScoped<ICinemaSeatRepository, CinemaSeatRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IMovieShowRepository, MovieShowRepository>();
+
 
 // Add services to the container.
 builder.Services.AddCors(options => {

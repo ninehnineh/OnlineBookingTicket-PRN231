@@ -1,6 +1,10 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
 using BusinessObject.Entities;
-using DataAccess;
+using DataAccess.DAO;
+using DTO.Movie;
+using DTO.MovieShow;
+using Repository.ServiceResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +17,13 @@ namespace Repository.MovieRepository
     {
         private readonly OnlineBookingTicketDbContext _dbContext;
         private readonly MovieDAO _MovieDao;
+        private readonly IMapper _mapper;
 
-        public MovieRepository(OnlineBookingTicketDbContext dbContext)
+        public MovieRepository(OnlineBookingTicketDbContext dbContext,IMapper mapper)
         {
             _dbContext = dbContext;
-            _MovieDao = new MovieDAO(_dbContext);
+            _mapper = mapper;
+            _MovieDao = new MovieDAO(_dbContext,_mapper);
         }
 
         public async Task<IQueryable<Movie>> GetMoviesAsync()
@@ -25,9 +31,27 @@ namespace Repository.MovieRepository
             return await _MovieDao.GetMoviesAsync();
         } 
 
-        public async Task<Movie> GetMovieAsync(int id)
+        public async Task<Movie> GetMovieByIdAsync(int id)
         {
-            return await _MovieDao.GetMovieAsync(id);
+            return await _MovieDao.GetMovieByIdAsync(id);
+        }
+
+        public async Task<Movie> AddMovie(string image, CreateMovieDto movieDto)
+        {
+            var movie = await _MovieDao.CreateMovieAsync(image, movieDto);
+            return movie;
+        }
+
+        public Task<ServiceResponse<string>> DeleteMovieAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Movie> UpdateMovieAsync(int id, UpdateMovieDto movieDto)
+        {
+            var movie = await _MovieDao.UpdateMovieAsync(id, movieDto);
+
+            return movie;
         }
     }
 }

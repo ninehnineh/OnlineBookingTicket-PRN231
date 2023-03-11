@@ -27,7 +27,7 @@ namespace BusinessObject
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
+        
         public DbSet<Movie> Movies { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
