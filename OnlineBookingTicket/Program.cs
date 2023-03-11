@@ -1,7 +1,15 @@
+using OnlineBookingTicket.Contracts;
+using OnlineBookingTicket.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
+
 
 var app = builder.Build();
 
