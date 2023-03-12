@@ -3,6 +3,8 @@ using BusinessObject;
 using BusinessObject.Entities;
 using DTO.City;
 using DTO.Movie;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,12 +18,15 @@ namespace DataAccess.DAO
     {
         private readonly OnlineBookingTicketDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IHostingEnvironment _environment;
 
-        public MovieDAO(OnlineBookingTicketDbContext dbContext, IMapper mapper)
+        public MovieDAO(OnlineBookingTicketDbContext dbContext,
+            IMapper mapper,
+            IHostingEnvironment environment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-
+            _environment = environment;
         }
 
         public async Task<IQueryable<Movie>> GetMoviesAsync()
@@ -79,6 +84,32 @@ namespace DataAccess.DAO
             {
                 throw new Exception(e.Message);
             }
+        } 
+        
+        public async Task<Movie> CreateMovieAsyncV1(IFormFile image , CreateMovieDto movieDto)
+        {
+            try
+            {
+                Movie movie = _mapper.Map<Movie>(movieDto);
+                var mybytes = System.Text.Encoding.UTF8.GetBytes(image.FileName);
+                if (image != null)
+                {
+                    var filePath = Path.Combine(_environment.ContentRootPath, @"..\OnlineBookingTicket\wwwroot\Image", image.FileName);
+                    using var fileStream = new FileStream(filePath, FileMode.Create);
+                    await image.CopyToAsync(fileStream);
+                    movie.Image = mybytes;
+                }
+
+                await _dbContext.Movies.AddAsync(movie);
+                await _dbContext.SaveChangesAsync();
+
+                return movie;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Entities;
 using DTO.Movie;
 using DTO.MovieShow;
+using Microsoft.AspNetCore.Http;
 using Repository.ServiceResponse;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Repository.MovieRepository
         Task<Movie> GetMovieByIdAsync(int id);
 
         Task<Movie> AddMovie(string image, CreateMovieDto movieDto);
-
+        Task<Movie> AddMovie(IFormFile image, CreateMovieDto movieDto);
         Task<ServiceResponse<string>> DeleteMovieAsync(int id);
 
         Task<Movie> UpdateMovieAsync(int id, UpdateMovieDto movieDto);

@@ -6,9 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Image\avatar_the_way_of_water.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LocalStorage" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Image\avatar_the_way_of_water.jpg" />
   </ItemGroup>
 
 </Project>
