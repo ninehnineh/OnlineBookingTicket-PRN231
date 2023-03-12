@@ -57,10 +57,10 @@ namespace OnlineBookingTicket.Controllers
 
         }
 
-        public async Task<IActionResult> Details(int key)
+        public async Task<IActionResult> Details(int id)
         {
             apiUrl = "https://localhost:7099/odata/Movies";
-            string query = $"({key})";
+            string query = $"({id})";
 
             HttpResponseMessage response = await _httpClient.GetAsync($"{apiUrl}{query}");
 
@@ -75,9 +75,15 @@ namespace OnlineBookingTicket.Controllers
 
             var movie = new MovieDetailsVM
             {
-                Id = key,
+                Id = id,
                 Title = (string)temp["Title"],
                 Country = (string)temp["Country"],
+                Description = (string)temp["Description"],
+                DurationInMinutes = (int)temp["DurationInMinutes"],
+                Genre = (string)temp["Genre"],
+                Image = GetImage(id).Result,
+                Language = (string)temp["Language"],
+                ReleaseDate = (DateTime)temp["ReleaseDate"]
             };
 
             return View(movie);
