@@ -4,6 +4,8 @@ using BusinessObject.Entities;
 using DataAccess.DAO;
 using DTO.Movie;
 using DTO.MovieShow;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Repository.ServiceResponse;
 using System;
 using System.Collections.Generic;
@@ -18,12 +20,16 @@ namespace Repository.MovieRepository
         private readonly OnlineBookingTicketDbContext _dbContext;
         private readonly MovieDAO _MovieDao;
         private readonly IMapper _mapper;
+        private readonly IHostingEnvironment _environment;
 
-        public MovieRepository(OnlineBookingTicketDbContext dbContext,IMapper mapper)
+        public MovieRepository(OnlineBookingTicketDbContext dbContext,
+            IMapper mapper,
+            IHostingEnvironment environment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _MovieDao = new MovieDAO(_dbContext,_mapper);
+            _environment = environment;
+            _MovieDao = new MovieDAO(_dbContext,_mapper, _environment);
         }
 
         public async Task<IQueryable<Movie>> GetMoviesAsync()
@@ -39,6 +45,12 @@ namespace Repository.MovieRepository
         public async Task<Movie> AddMovie(string image, CreateMovieDto movieDto)
         {
             var movie = await _MovieDao.CreateMovieAsync(image, movieDto);
+            return movie;
+        }
+        
+        public async Task<Movie> AddMovie(IFormFile image, CreateMovieDto movieDto)
+        {
+            var movie = await _MovieDao.CreateMovieAsyncV1(image, movieDto);
             return movie;
         }
 

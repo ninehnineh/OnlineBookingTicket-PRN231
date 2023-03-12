@@ -40,9 +40,20 @@ namespace OnlineBookingTicketAPI.Controllers
             return movie == null ? NotFound($"Not Found MovieId {key}") : Ok(movie);
         }
 
+        //[EnableQuery]
+        //[Authorize(Policy = "RequireAdminRole")]
+        //public async Task<IActionResult> Post(string image, [FromBody] CreateMovieDto movieDto)
+        //{
+
+        //    await _movieRepository.AddMovie(image, movieDto);
+        //    var model = _mapper.Map<Movie>(movieDto);
+
+        //    return Created(model);
+        //}
+
         [EnableQuery]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> Post(string image, [FromBody] CreateMovieDto movieDto)
+        public async Task<IActionResult> Post(IFormFile image, [FromForm] CreateMovieDto movieDto)
         {
 
             await _movieRepository.AddMovie(image,movieDto);
@@ -64,6 +75,18 @@ namespace OnlineBookingTicketAPI.Controllers
             var ci = await _movieRepository.UpdateMovieAsync(key, movieDto);
 
             return Updated(ci);
+        }
+
+        [HttpGet("image/{id}")]
+        public async Task<IActionResult> GetImage(int id)
+        {
+            var movie = await _movieRepository.GetMovieByIdAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            byte[] photoBack = movie.Image;
+            return File(photoBack, "image/jpg");
         }
     }
 }
