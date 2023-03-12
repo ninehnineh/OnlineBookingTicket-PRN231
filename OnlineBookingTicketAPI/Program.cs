@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using Repository.AuthenticationRepository;
 using DataAccess;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
 
 static IEdmModel GetEdmModel()
 {
@@ -142,6 +143,10 @@ builder.Services.AddAuthentication(op =>
     };
 });
 
+builder.Services.AddAuthorization(op =>
+{
+    op.AddPolicy("RequireAdminRole", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+});
 
 var app = builder.Build();
 

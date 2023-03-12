@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineBookingTicket.Models
+namespace OnlineBookingTicket.Models.AuthenVMs
 {
     public class LoginVM
     {

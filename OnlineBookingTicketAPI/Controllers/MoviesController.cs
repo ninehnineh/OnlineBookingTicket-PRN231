@@ -2,6 +2,7 @@
 using BusinessObject.Entities;
 using DTO.Movie;
 using DTO.MovieShow;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -13,6 +14,7 @@ namespace OnlineBookingTicketAPI.Controllers
 {
     //[Route("api/[controller]")]
     //[ApiController]
+    [Authorize]
     public class MoviesController : ODataController
     {
         private readonly IMovieRepository _movieRepository;
@@ -39,6 +41,7 @@ namespace OnlineBookingTicketAPI.Controllers
         }
 
         [EnableQuery]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> Post(string image, [FromBody] CreateMovieDto movieDto)
         {
 
@@ -50,6 +53,7 @@ namespace OnlineBookingTicketAPI.Controllers
 
 
         [EnableQuery]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> Put(int key, [FromBody] UpdateMovieDto movieDto)
         {
             var model = await _movieRepository.GetMovieByIdAsync(key);
