@@ -32,12 +32,12 @@ namespace Repository.MovieRepository
             _MovieDao = new MovieDAO(_dbContext,_mapper, _environment);
         }
 
-        public async Task<IQueryable<Movie>> GetMoviesAsync()
+        public async Task<List<Movie>> GetMoviesAsync()
         {
             return await _MovieDao.GetMoviesAsync();
         } 
 
-        public async Task<Movie> GetMovieByIdAsync(int id)
+        public async Task<MovieDto> GetMovieByIdAsync(int id)
         {
             return await _MovieDao.GetMovieByIdAsync(id);
         }
@@ -64,6 +64,11 @@ namespace Repository.MovieRepository
             var movie = await _MovieDao.UpdateMovieAsync(id, movieDto);
 
             return movie;
+        }
+
+        public async Task<IEnumerable<MovieDto>> GetMoviesAsyncV1()
+        {
+            return await _MovieDao.GetMoviesAsyncV1();
         }
     }
 }

@@ -27,6 +27,17 @@ namespace DataAccess.DAO
         {
             return await _context.MovieShows.ToListAsync();
         }
+
+        public async Task<IQueryable<MovieShow>> GetMovieShowsAsync()
+        {
+            var movieShows = _context.MovieShows
+                .Include(x => x.Bookings)
+                .Include(z => z.ShowSeats)
+                .Include(y => y.CinemaHall);
+                
+            return movieShows;
+        }
+
         public async Task<MovieShow> GetMovieShowByIdAsync(int id)
         {
             var movieShow = await _context.MovieShows

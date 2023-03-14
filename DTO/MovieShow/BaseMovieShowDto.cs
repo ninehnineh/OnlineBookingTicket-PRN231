@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DTO.CinemaHall;
+using DTO.Movie;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DTO.MovieShow
@@ -15,6 +18,8 @@ namespace DTO.MovieShow
 
         public int MovieID { get; set; }
         public int CinemaHallID { get; set; }
-
+        [JsonIgnore]
+        public MovieDto Movie { get; set; }
+        public CinemaHallDto CinemaHall { get; set; }
     }
 }

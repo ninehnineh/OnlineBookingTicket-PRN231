@@ -3,10 +3,12 @@ using BusinessObject;
 using BusinessObject.Entities;
 using DataAccess.DAO;
 using DTO.Cinema;
+using DTO.Movie;
 using DTO.MovieShow;
 using Repository.ServiceResponse;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,5 +68,12 @@ namespace Repository.MovieShowRepository
 
             return movieShow;
         }
+
+        public async Task<IQueryable<MovieShow>> GetMovieShowsAsync()
+        {
+            return await _movieShowDAO.GetMovieShowsAsync();
+        }
+
+
     }
 }

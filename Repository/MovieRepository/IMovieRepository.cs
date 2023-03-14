@@ -13,14 +13,14 @@ namespace Repository.MovieRepository
 {
     public interface IMovieRepository
     {
-        Task<IQueryable<Movie>> GetMoviesAsync();
-        Task<Movie> GetMovieByIdAsync(int id);
+        Task<List<Movie>> GetMoviesAsync();
+        Task<MovieDto> GetMovieByIdAsync(int id);
 
         Task<Movie> AddMovie(string image, CreateMovieDto movieDto);
         Task<Movie> AddMovie(IFormFile image, CreateMovieDto movieDto);
         Task<ServiceResponse<string>> DeleteMovieAsync(int id);
 
         Task<Movie> UpdateMovieAsync(int id, UpdateMovieDto movieDto);
-
+        Task<IEnumerable<MovieDto>> GetMoviesAsyncV1();
     }
 }

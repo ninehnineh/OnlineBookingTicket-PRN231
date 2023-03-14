@@ -1,15 +1,10 @@
-﻿using BusinessObject.Entities.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using OnlineBookingTicket.Models.MovieShowVMs;
 
-namespace BusinessObject.Entities
+namespace OnlineBookingTicket.Models.MovieVMs
 {
-    public class Movie : BaseEntity
+    public class MovieVM
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public byte[] Image { get; set; }
@@ -19,6 +14,6 @@ namespace BusinessObject.Entities
         public string Country { get; set; }
         public string Genre { get; set; }
 
-        public List<MovieShow> MovieShows { get; set; }
+        public List<MovieShowVM> MovieShows { get; set; }
     }
 }

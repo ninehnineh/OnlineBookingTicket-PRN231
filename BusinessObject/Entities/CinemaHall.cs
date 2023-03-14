@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Entities.Common;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Entities
 {
@@ -9,6 +10,7 @@ namespace BusinessObject.Entities
 
         public int CinemaID { get; set; }
         public Cinema Cinema { get; set; }
+        [JsonIgnore]
         public List<MovieShow> MovieShows { get; set; }
         public List<CinemaSeat> CinemaSeats { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Entities.Common;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Entities
 {

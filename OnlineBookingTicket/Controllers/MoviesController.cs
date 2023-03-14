@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnlineBookingTicket.Contracts;
+using OnlineBookingTicket.Models.MovieShowVMs;
 using OnlineBookingTicket.Models.MovieVMs;
 using OnlineBookingTicket.Services;
 using System.Composition.Convention;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace OnlineBookingTicket.Controllers
@@ -46,7 +49,7 @@ namespace OnlineBookingTicket.Controllers
 
             dynamic temp = JObject.Parse(data);
 
-            var movies = ((JArray)temp.value).Select( x => new ListMovieVM
+            var movies = ((JArray)temp.value).Select(x => new ListMovieVM
             {
                 Id = (int)x["Id"],
                 Title = (string)x["Title"],
@@ -76,16 +79,17 @@ namespace OnlineBookingTicket.Controllers
             var movie = new MovieDetailsVM
             {
                 Id = id,
-                Title = (string)temp["Title"],
-                Country = (string)temp["Country"],
-                Description = (string)temp["Description"],
-                DurationInMinutes = (int)temp["DurationInMinutes"],
-                Genre = (string)temp["Genre"],
+                Title = (string)temp["title"],
+                Country = (string)temp["country"],
+                Description = (string)temp["description"],
+                DurationInMinutes = (int)temp["durationInMinutes"],
+                Genre = (string)temp["genre"],
                 Image = GetImage(id).Result,
-                Language = (string)temp["Language"],
-                ReleaseDate = (DateTime)temp["ReleaseDate"]
+                Language = (string)temp["language"],
+                ReleaseDate = (DateTime)temp["releaseDate"],
+                MovieShows = (List<MovieShowVM>)temp["movieShows"].ToObject<List<MovieShowVM>>(),
             };
-
+            
             return View(movie);
         }
 

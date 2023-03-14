@@ -25,12 +25,12 @@ namespace OnlineBookingTicketAPI.Controllers
         }
 
 
-        [EnableQuery(PageSize = 1)]
-        public async Task<ActionResult<ServiceResponse<List<MovieShow>>>> Get()
-        {
-            var list = await repository.GetMovieShows();
-            return Ok(list);
-        }
+        //[EnableQuery(PageSize = 1)]
+        //public async Task<ActionResult<ServiceResponse<List<MovieShow>>>> Get()
+        //{
+        //    var list = await repository.GetMovieShows();
+        //    return Ok(list);
+        //}
 
         [EnableQuery]
         public async Task<ActionResult> Get(int key)
@@ -74,6 +74,11 @@ namespace OnlineBookingTicketAPI.Controllers
             return Ok();
         }
 
-
+        [EnableQuery]
+        public async Task<ActionResult> Get()
+        {
+            var movieShows = await repository.GetMovieShowsAsync();
+            return Ok(movieShows);
+        }
     }
 }

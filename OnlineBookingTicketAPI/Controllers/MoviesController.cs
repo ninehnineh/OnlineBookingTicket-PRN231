@@ -27,11 +27,19 @@ namespace OnlineBookingTicketAPI.Controllers
         }
 
         [EnableQuery]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<Movie>> Get()
         {
             var movies = await _movieRepository.GetMoviesAsync();
             return Ok(movies);
         }
+
+        //[HttpGet]
+        //[EnableQuery]
+        //public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
+        //{
+        //    var movies = await _movieRepository.GetMoviesAsyncV1();
+        //    return Ok(movies);
+        //}
 
         [EnableQuery]
         public async Task<ActionResult> Get(int key)

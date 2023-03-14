@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DTO.MovieShow;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,8 @@ namespace DTO.Movie
     public class MovieDto : BaseMovieDto,IBaseDto
     {
         public int Id { get; set; }
+        public byte[] Image { get; set; }
+        public List<MovieShowDto> MovieShows { get; set; }
+
     }
 }

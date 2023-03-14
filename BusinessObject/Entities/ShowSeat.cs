@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Entities.Common;
 using BusinessObject.Enum;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Entities
 {
@@ -11,6 +12,7 @@ namespace BusinessObject.Entities
         public int BookingID { get; set; }
         public Booking Booking { get; set; }
         public int MovieShowID { get; set; }
+        [JsonIgnore]
         public MovieShow MovieShow { get; set; }
         public int CinemaSeatID { get; set; }
         public CinemaSeat CinemaSeat { get; set; }
