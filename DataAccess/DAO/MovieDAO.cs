@@ -6,6 +6,7 @@ using DTO.Movie;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,41 +30,54 @@ namespace DataAccess.DAO
             _environment = environment;
         }
 
-        public async Task<IQueryable<Movie>> GetMoviesAsync()
+        public async Task<List<Movie>> GetMoviesAsync()
         {
-            var movies = _dbContext.Movies.Include(x => x.MovieShows);
+            var movies = await _dbContext.Movies
+                .Include(x => x.MovieShows).ToListAsync();
+                
             return movies;
         }
+        
+        public async Task<IEnumerable<MovieDto>> GetMoviesAsyncV1()
+        {
+            var movies = await _dbContext.Movies
+                .Include(x => x.MovieShows)
+                .ToListAsync();
 
-        public async Task<Movie> GetMovieByIdAsync(int id)
+            return _mapper.Map<IEnumerable<MovieDto>>(movies);
+        }
+
+        public async Task<MovieDto> GetMovieByIdAsync(int id)
         {
             var movie = await _dbContext.Movies
                 .Include(x => x.MovieShows)
+                .ThenInclude(x => x.CinemaHall)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            return movie;
+            return _mapper.Map<MovieDto>(movie);
         }
 
         public async Task<Movie> UpdateMovieAsync(int id, UpdateMovieDto movieDto)
         {
-            try
-            {
-                var movie = await GetMovieByIdAsync(id);
-                if (movie == null)
-                {
-                    return null;
-                }
-                var updateMovie = _mapper.Map(movieDto, movie);
-                _dbContext.Update(updateMovie);
-                await _dbContext.SaveChangesAsync();
+            //try
+            //{
+            //    var movie = await GetMovieByIdAsync(id);
+            //    if (movie == null)
+            //    {
+            //        return null;
+            //    }
+            //    var updateMovie = _mapper.Map(movieDto, movie);
+            //    _dbContext.Update(updateMovie);
+            //    await _dbContext.SaveChangesAsync();
 
-                return updateMovie;
+            //    return updateMovie;
 
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new Exception(e.Message);
+            //}
+            return null;
         }
 
 

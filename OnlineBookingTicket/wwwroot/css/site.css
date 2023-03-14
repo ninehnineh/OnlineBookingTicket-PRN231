@@ -16,3 +16,46 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+th {
+    padding: 8px;
+}
+
+td {
+    padding: 4px 8px;
+}
+
+#seatSelection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+    #seatSelection .screen {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    #seatSelection .seatRow {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    #seatSelection .seat {
+        width: 2rem;
+        height: 2rem;
+        margin: 0 0.5rem;
+        border-radius: 50%;
+        background-color: #ccc;
+    }
+
+        #seatSelection .seat.selected {
+            background-color: green;
+        }
+
+        #seatSelection .seat.unavailable {
+            background-color: red;
+        }

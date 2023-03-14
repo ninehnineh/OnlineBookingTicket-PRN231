@@ -23,19 +23,7 @@ using DataAccess;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 
-static IEdmModel GetEdmModel()
-{
-    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<Cinema>("Cinemas");
-    builder.EntitySet<City>("Cities");
-    builder.EntitySet<Movie>("Movies");
-    builder.EntitySet<ShowSeat>("ShowSeats");
-    builder.EntitySet<CinemaHall>("CinemaHalls");
-    builder.EntitySet<CinemaSeat>("CinemaSeats");
-    builder.EntitySet<Booking>("Bookings");
-    builder.EntitySet<MovieShow>("MovieShows");
-    return builder.GetEdmModel();
-}
+
 
 
 
@@ -81,7 +69,19 @@ builder.Services.AddIdentity<AppUsers, IdentityRole>()
 builder.Services.AddControllers().AddOData(options =>
 options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
 
-
+static IEdmModel GetEdmModel()
+{
+    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+    builder.EntitySet<Cinema>("Cinemas");
+    builder.EntitySet<City>("Cities");
+    builder.EntitySet<Movie>("Movies");
+    builder.EntitySet<ShowSeat>("ShowSeats");
+    builder.EntitySet<CinemaHall>("CinemaHalls");
+    builder.EntitySet<CinemaSeat>("CinemaSeats");
+    builder.EntitySet<Booking>("Bookings");
+    builder.EntitySet<MovieShow>("MovieShows");
+    return builder.GetEdmModel();
+}
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

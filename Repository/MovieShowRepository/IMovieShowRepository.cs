@@ -21,5 +21,7 @@ namespace Repository.MovieShowRepository
         Task<ServiceResponse<string>> DeleteMovieShowAsync(int id);
 
         Task<MovieShow> UpdateMovieShowAsync(int id, UpdateMovieShowDto movieShowDto);
+
+        Task<IQueryable<MovieShow>> GetMovieShowsAsync();
     }
 }

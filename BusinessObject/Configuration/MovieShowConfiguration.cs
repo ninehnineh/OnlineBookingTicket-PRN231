@@ -17,15 +17,15 @@ namespace BusinessObject.Configuration
                 .HasKey(x => x.Id);
 
             builder.Property(x => x.Date)
-                .HasColumnType("date")
+                .HasColumnType("datetime")
                 .IsRequired();
 
             builder.Property(x => x.Starttime)
-                .HasColumnType("date")
+                .HasColumnType("datetime")
                 .IsRequired();
 
             builder.Property(x => x.Endtime)
-                .HasColumnType("date")
+                .HasColumnType("datetime")
                 .IsRequired();
 
             builder.HasOne(x => x.Movie)
