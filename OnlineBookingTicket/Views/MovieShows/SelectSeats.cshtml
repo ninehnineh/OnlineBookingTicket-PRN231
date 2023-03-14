@@ -17,61 +17,70 @@
             border-width: 0;
             background-color: #00A4BD;
         }
+        .seat-button {
+          border: 2px solid #ddd;
+          background-color: #fff;
+          color: #555;
+          font-size: 16px;
+          padding: 10px;
+          margin: 5px;
+          cursor: pointer;
+        }
+
+        .seat-button.selected {
+          background-color: #007bff;
+          color: #fff;
+        }
     </style>
 </head>
 <body>
-    <h1>Cinema Hall</h1>
+    <h1>Select Seats</h1>
     <hr>
     <div class="center-screen">
         <h3>Screen</h3>
     </div>
-   <form>
+    <form action="@Url.Action("BookMovieShow", "MovieShows")" method="post">
+        <input type="hidden" name="movieShowId" value="@ViewBag.MovieShowId" />
+        <input type="hidden" name="cinemaHallId" value="@ViewBag.cinemaHallId" />
         <table class="center-screen" action="">
             <column>
-                <row>
-                    <tr>
-                        <td><input type="checkbox" id="A1"><label for="A1">A1</label></td>
-                        <td><input type="checkbox" id="A2"><label for="A2">A2</label></td>
-                        <td><input type="checkbox" id="A3"><label for="A3">A3</label></td>
-                        <td><input type="checkbox" id="A4"><label for="A4">A4</label></td>
-                        <td><input type="checkbox" id="A5"><label for="A5">A5</label></td>
-                        <!-- Repeat this for the remaining As -->
-                    </tr>
-                </row>
-                <row>
-                    <tr>
-                        <td><input type="checkbox" id="B6"><label for="B6">B6</label></td>
-                        <td><input type="checkbox" id="B7"><label for="B7">B7</label></td>
-                        <td><input type="checkbox" id="B8"><label for="B8">B8</label></td>
-                        <td><input type="checkbox" id="B9"><label for="B9">B9</label></td>
-                        <td><input type="checkbox" id="B10"><label for="B10">B10</label></td>
-                        <!-- Repeat this for the remaining As -->
-                    </tr>
-                </row>
-                <row>
-                    <tr>
-                        <td><input type="checkbox" id="C11"><label for="C11">C11</label></td>
-                        <td><input type="checkbox" id="C12"><label for="C12">C12</label></td>
-                        <td><input type="checkbox" id="C13"><label for="C13">C13</label></td>
-                        <td><input type="checkbox" id="C14"><label for="C14">C14</label></td>
-                        <td><input type="checkbox" id="C15"><label for="C15">C15</label></td>
-                        <!-- Repeat this for the remaining As -->
-                    </tr>
-                </row>
-                <row>
-                    <tr>
-                        <td><input type="checkbox" id="D16"><label for="D16">D16</label></td>
-                        <td><input type="checkbox" id="D17"><label for="D17">D17</label></td>
-                        <td><input type="checkbox" id="D18"><label for="D18">D18</label></td>
-                        <td><input type="checkbox" id="D19"><label for="D19">D19</label></td>
-                        <td><input type="checkbox" id="D20"><label for="D20">D20</label></td>
-                        <!-- Repeat this for the remaining seats -->
-                    </tr>
-                </row>
-            </column>
-            <!-- Repeat the above two rows for the remaining rows of seats -->
 
+        @for (int i = 1; i <= 50; i++)
+        {
+
+            if (i % 5 == 1)
+            {
+               @:<row>
+                    @:<tr>
+                
+            }
+            <td>
+               <input type="checkbox" id="A@(i)" name="seatSelection" value="@i">
+               <label for="A@(i)">A@(i)</label>
+            </td>
+            if (i % 5 == 0 || i == 50)
+            {
+                
+                    @:</tr>
+               @:</row>
+            }
+        }
+            </column>
         </table>
+        <button type="submit" class="btn btn-primary">Book</button>
    </form>
 </body>
 </html>
+@section Scripts{
+    <script>
+        var seatButtons = document.querySelectorAll(".seat-button");
+
+        // Add event listeners to each seat button
+        seatButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            // Toggle the "selected" class of the clicked button
+            button.classList.toggle("selected");
+          });
+        });
+    </script>
+}

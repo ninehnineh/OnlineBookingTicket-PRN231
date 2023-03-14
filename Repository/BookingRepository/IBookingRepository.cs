@@ -11,6 +11,6 @@ namespace Repository.BookingRepository
 {
     public interface IBookingRepository
     {
-        Task<Booking> BookingAsync(CreateBookingDto bookingDto);
+        Task<CreateBookingResponse> BookingAsync(CreateBookingDto bookingDto);
     }
 }

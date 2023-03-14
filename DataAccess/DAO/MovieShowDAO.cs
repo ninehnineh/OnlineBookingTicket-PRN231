@@ -33,7 +33,9 @@ namespace DataAccess.DAO
             var movieShows = _context.MovieShows
                 .Include(x => x.Bookings)
                 .Include(z => z.ShowSeats)
-                .Include(y => y.CinemaHall);
+                .Include(y => y.CinemaHall)
+                .ThenInclude(x => x.CinemaSeats);
+                
                 
             return movieShows;
         }

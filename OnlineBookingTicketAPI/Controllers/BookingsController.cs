@@ -27,11 +27,9 @@ namespace OnlineBookingTicketAPI.Controllers
         public async Task<IActionResult> Post([FromBody] CreateBookingDto bookingDto)
         {
 
-            await repository.BookingAsync(bookingDto);
-            var model = _mapper.Map<Booking>(bookingDto);
+            var booking = await repository.BookingAsync(bookingDto);
 
-
-            return Created(model);
+            return Ok(booking);
         }
     }
 }

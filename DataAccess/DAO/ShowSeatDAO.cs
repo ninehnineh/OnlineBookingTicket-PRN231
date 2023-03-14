@@ -41,7 +41,7 @@ namespace DataAccess.DAO
             try
             {
                 ShowSeat showSeat = _mapper.Map<ShowSeat>(showSeatDto);
-                showSeat.Status = BusinessObject.Enum.ShowSeatStatus.Empty;
+                showSeat.Status = BusinessObject.Enum.ShowSeatStatus.Booked;
 
                 await _context.ShowSeats.AddAsync(showSeat);
                 await _context.SaveChangesAsync();

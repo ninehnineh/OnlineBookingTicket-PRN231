@@ -25,7 +25,7 @@ namespace Repository.CinemaSeatRepository
             _mapper = mapper;
             _cinemaSeatDAO = new CinemaSeatDAO(_context, _mapper);
         }
-        public async Task<CinemaSeat> AddCinemaSeat(CreateCinemaSeatDto cinemaSeatDto)
+        public async Task<CreateCinemaSeatResponse> AddCinemaSeat(CreateCinemaSeatDto cinemaSeatDto)
         {
             var cinemaSeat = await _cinemaSeatDAO.CreateCinemaSeatAsync(cinemaSeatDto);
             return cinemaSeat;

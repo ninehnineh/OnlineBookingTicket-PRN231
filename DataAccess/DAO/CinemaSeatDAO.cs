@@ -65,7 +65,7 @@ namespace DataAccess.DAO
         }
 
 
-        public async Task<CinemaSeat> CreateCinemaSeatAsync(CreateCinemaSeatDto cinemaSeatDto)
+        public async Task<CreateCinemaSeatResponse> CreateCinemaSeatAsync(CreateCinemaSeatDto cinemaSeatDto)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace DataAccess.DAO
                 await _context.CinemaSeats.AddAsync(cinemaSeat);
                 await _context.SaveChangesAsync();
 
-                return cinemaSeat;
+                return new CreateCinemaSeatResponse { Id = cinemaSeat.Id};
             }
             catch (Exception e)
             {

@@ -14,7 +14,7 @@ namespace Repository.CinemaSeatRepository
     {
         Task<ServiceResponse<List<CinemaSeat>>> GetCinemaSeats();
 
-        Task<CinemaSeat> AddCinemaSeat(CreateCinemaSeatDto cinemaSeatDto);
+        Task<CreateCinemaSeatResponse> AddCinemaSeat(CreateCinemaSeatDto cinemaSeatDto);
 
         Task<CinemaSeat> GetCinemaSeatByIdAsync(int id);
 

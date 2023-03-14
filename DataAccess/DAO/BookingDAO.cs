@@ -24,13 +24,14 @@ namespace DataAccess.DAO
             _showSeatDAO = new ShowSeatDAO(_context, _mapper);
         }
 
-        public async Task<Booking> BookingAsync(CreateBookingDto bookingDto)
+        public async Task<CreateBookingResponse> BookingAsync(CreateBookingDto bookingDto)
         {
             Booking booking = _mapper.Map<Booking>(bookingDto);
 
             await _context.Bookings.AddAsync(booking);
             await _context.SaveChangesAsync();
-            return booking;
+
+            return new CreateBookingResponse { Id = booking.Id } ;
         } 
     }
 }
