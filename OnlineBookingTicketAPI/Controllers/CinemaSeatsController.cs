@@ -43,10 +43,9 @@ namespace OnlineBookingTicketAPI.Controllers
         public async Task<IActionResult> Post([FromBody] CreateCinemaSeatDto cinemaSeatDto)
         {
 
-            await repository.AddCinemaSeat(cinemaSeatDto);
-            var model = _mapper.Map<CinemaSeat>(cinemaSeatDto);
+            var cinemaSeat = await repository.AddCinemaSeat(cinemaSeatDto);
 
-            return Created(model);
+            return Ok(cinemaSeat);
         }
 
         [EnableQuery]

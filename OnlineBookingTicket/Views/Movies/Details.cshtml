@@ -97,6 +97,7 @@
                             <td>
                                 <form action="@Url.Action("SelectSeats", "MovieShows")" method="post">
                                     <input type="hidden" name="movieShowId" value="@movieShow.Id" />
+                                    <input type="hidden" name="cinemaHallId" value="@movieShow.CinemaHallID" />
                                     <input type="hidden" name="totalSeats" value="@movieShow.CinemaHall.Totalseats" />
                                     <button type="submit" class="btn btn-primary">Buy Ticket</button>
                                 </form>

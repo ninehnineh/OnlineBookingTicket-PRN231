@@ -24,9 +24,9 @@ namespace Repository.BookingRepository
             _mapper = mapper;
             _bookingDAO = new BookingDAO(_context, _mapper);
         }
-        public Task<Booking> BookingAsync(CreateBookingDto bookingDto)
+        public async Task<CreateBookingResponse> BookingAsync(CreateBookingDto bookingDto)
         {
-            var bookings = _bookingDAO.BookingAsync(bookingDto);
+            var bookings = await _bookingDAO.BookingAsync(bookingDto);
 
             return bookings;
         }
