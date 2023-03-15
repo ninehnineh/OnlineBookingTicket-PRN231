@@ -82,6 +82,15 @@ namespace DataAccess.DAO
             }
         }
 
+        public async Task<List<CinemaSeatDto>> GetCinemaSeatsAsync(int cinemaHallID)
+        {
+            var cinemaSeats = await _context.CinemaSeats
+                .Include(x => x.CinemaHall)
+                .Where(x => x.CinemaHallID == cinemaHallID)
+                .ToListAsync();
+
+            return _mapper.Map<List<CinemaSeatDto>>(cinemaSeats);
+        }
     }
 }
 

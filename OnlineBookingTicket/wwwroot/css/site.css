@@ -59,3 +59,14 @@ td {
         #seatSelection .seat.unavailable {
             background-color: red;
         }
+
+.disabled-seat {
+    background-color: green;
+}
+.available {
+    background-color: green;
+}
+
+.unavailable {
+    background-color: red;
+}
