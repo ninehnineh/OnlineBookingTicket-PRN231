@@ -2,6 +2,8 @@
 using OnlineBookingTicket.Contracts;
 using OnlineBookingTicket.Models.BookingVMs;
 using OnlineBookingTicket.Models.CinemaSeatVMs;
+using OnlineBookingTicket.Models.MovieShowVMs;
+using OnlineBookingTicket.Models.ShowSeatVMs;
 using OnlineBookingTicket.Services;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -35,6 +37,7 @@ namespace OnlineBookingTicket.Controllers
         }
         public async Task<IActionResult> BookMovieShow(string[] seatSelection, int movieShowId, int cinemaHallId)
         {
+            var cinemaSeatsId = new List<CreateCinemaSeatResponseVM>();
 
             foreach (var seat in seatSelection)
             {
@@ -44,9 +47,9 @@ namespace OnlineBookingTicket.Controllers
                     Type = 1,
                     CinemaHallID = cinemaHallId,
                 };
-                await CreateCinemaSeats(cinemaSeat);
+                cinemaSeatsId.Add(CreateCinemaSeats(cinemaSeat).Result.Value);
             }
-
+            
             string userId = GetAuthenticatedUserId();
 
             var bookingVM = new CreateBookingVM
@@ -57,13 +60,26 @@ namespace OnlineBookingTicket.Controllers
                 Timestamp = DateTime.Now,
             };
 
-            await CreateBooking(bookingVM);
+            var bookingId = CreateBooking(bookingVM).Result.Value.Id;
 
 
+            foreach (var cinemaSeat in cinemaSeatsId)
+            {
+                var showSeat = new CreateShowSeatVM
+                {
+                    BookingID = bookingId,
+                    CinemaSeatID = cinemaSeat.Id,
+                    MovieShowID = movieShowId,
+                    Status = Models.Enum.ShowSeatStatusVM.Booked,
+                    Price = 100
+                };
+
+                await CreateShowSeat(showSeat);
+            }
 
             return View();
         }
-        private async Task<IActionResult> CreateCinemaSeats(CreateCinemaSeatVM cinemaSeat)
+        private async Task<ActionResult<CreateCinemaSeatResponseVM>> CreateCinemaSeats(CreateCinemaSeatVM cinemaSeat)
         {
             apiUrl = "https://localhost:7099/odata/CinemaSeats";
 
@@ -72,10 +88,19 @@ namespace OnlineBookingTicket.Controllers
                 string strData = JsonSerializer.Serialize(cinemaSeat);
                 var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, contentData);
+
+                var data = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var cinemaSeatId = JsonSerializer.Deserialize<CreateCinemaSeatResponseVM>(data, options).Id;
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = "Insert successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return new CreateCinemaSeatResponseVM { Id = cinemaSeatId };       
                 }
                 else
                 {
@@ -94,7 +119,7 @@ namespace OnlineBookingTicket.Controllers
             return userId;
         }
 
-        private async Task<ActionResult> CreateBooking(CreateBookingVM bookingVM)
+        private async Task<ActionResult<CreateBookingResponseVM>> CreateBooking(CreateBookingVM bookingVM)
         {
             apiUrl = "https://localhost:7099/odata/Bookings";
 
@@ -115,7 +140,7 @@ namespace OnlineBookingTicket.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = "Insert successfully!";
-                    return RedirectToAction(nameof(Index));
+                    return new CreateBookingResponseVM { Id = bookingId };
                 }
                 else
                 {
@@ -125,6 +150,29 @@ namespace OnlineBookingTicket.Controllers
 
             return View();
 
+        }
+
+        private async Task<ActionResult> CreateShowSeat(CreateShowSeatVM showSeatVM)
+        {
+            apiUrl = "https://localhost:7099/odata/ShowSeats";
+
+            if (ModelState.IsValid)
+            {
+                string strData = JsonSerializer.Serialize(showSeatVM);
+                var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, contentData);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Message"] = "Insert successfully!";
+                }
+                else
+                {
+                    ViewBag.Message = "Error while calling WebAPI!";
+                }
+            }
+
+            return View();
         }
     }
 }
