@@ -18,5 +18,7 @@ namespace OnlineBookingTicket.Models.MovieVMs
         public string Genre { get; set; }
         public List<MovieShowVM> MovieShows { get; set; }
 
+        public bool isBooked { get; set; }
+
     }
 }

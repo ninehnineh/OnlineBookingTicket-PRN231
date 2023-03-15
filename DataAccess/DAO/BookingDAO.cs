@@ -4,6 +4,7 @@ using BusinessObject.Entities;
 using BusinessObject.Enum;
 using DTO.Booking;
 using DTO.Cinema;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,15 @@ namespace DataAccess.DAO
             await _context.SaveChangesAsync();
 
             return new CreateBookingResponse { Id = booking.Id } ;
-        } 
+        }
+
+        public async Task<BookingDto> GetBookingAsync(string userId)
+        {
+            var booking = await _context.Bookings
+                .Include(x => x.MovieShow)
+                .FirstOrDefaultAsync(x => x.AppUserID == userId);
+
+            return _mapper.Map<BookingDto>(booking);
+        }
     }
 }

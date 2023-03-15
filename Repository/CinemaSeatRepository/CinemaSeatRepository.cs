@@ -66,5 +66,11 @@ namespace Repository.CinemaSeatRepository
 
             return cinema;
         }
+
+        public async Task<List<CinemaSeatDto>> GetCinemaSeatsAsync(int cinemaHallID)
+        {
+            var cinemaSeats = await _cinemaSeatDAO.GetCinemaSeatsAsync(cinemaHallID);
+            return cinemaSeats;
+        }
     }
 }

@@ -4,7 +4,14 @@
 <head>
     <title>Cinema Hall</title>
     <style>
-        .center-screen {
+        .center-screen-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .center-screen-table {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -36,36 +43,51 @@
 <body>
     <h1>Select Seats</h1>
     <hr>
-    <div class="center-screen">
+    <div class="center-screen-screen">
         <h3>Screen</h3>
     </div>
     <form action="@Url.Action("BookMovieShow", "MovieShows")" method="post">
         <input type="hidden" name="movieShowId" value="@ViewBag.MovieShowId" />
         <input type="hidden" name="cinemaHallId" value="@ViewBag.cinemaHallId" />
-        <table class="center-screen" action="">
-            <column>
 
-        @for (int i = 1; i <= 50; i++)
-        {
+        <table class="center-screen-table" action="">
+            <tbody>
+                    @for (int i = 1; i <= 50; i++)
+                    {
 
-            if (i % 5 == 1)
-            {
-               @:<row>
-                    @:<tr>
+                        if (i % 5 == 1)
+                        {
+                           @:<row>
+                                @:<tr>
                 
-            }
-            <td>
-               <input type="checkbox" id="A@(i)" name="seatSelection" value="@i">
-               <label for="A@(i)">A@(i)</label>
-            </td>
-            if (i % 5 == 0 || i == 50)
-            {
+                        }
+                        
+                        <td>
+                           <div>
+                               <input type="checkbox" id="A@(i)" name="seatSelection" value="@i">
+                               <label for="A@(i)">A@(i)</label>
+                           </div>
+                        </td>
+                        if (i % 5 == 0 || i == 50)
+                        {
                 
-                    @:</tr>
-               @:</row>
-            }
-        }
-            </column>
+                                @:</tr> 
+                           @:</row>
+                        }
+                    }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <label style="background-color:green" >A1:</label>
+                        <label>Unavailable</label>
+                    </td>
+                    <td>
+                        <label >A1:</label>
+                        <label>Available</label>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
         <button type="submit" class="btn btn-primary">Book</button>
    </form>
@@ -73,14 +95,35 @@
 </html>
 @section Scripts{
     <script>
-        var seatButtons = document.querySelectorAll(".seat-button");
-
-        // Add event listeners to each seat button
-        seatButtons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            // Toggle the "selected" class of the clicked button
-            button.classList.toggle("selected");
-          });
+        $(document).ready(function() {
+            for (let i = 1; i <= 50; i++) {
+                getCinemaSeat(@(ViewBag.cinemaHallId), i).then(function(cinemaSeat) {
+                    console.log(cinemaSeat);
+                    if (cinemaSeat != null) {
+                        $('#A' + i).prop('disabled', true);
+                        $('#A' + i).closest('div').addClass('disabled-seat');
+                    }
+                }).catch(function(error) {
+                    console.log('Error: ' + error);
+                });
+            }
         });
+
+        function getCinemaSeat(cinemaHallID, seatNumber) {
+            return new Promise(function(resolve, reject) {
+                $.ajax({
+                    url: 'https://localhost:7099/getcinemaseats/' + cinemaHallID,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(cinemaSeats) {
+                        var cinemaSeat = cinemaSeats.find(cs => cs.seatNumber === seatNumber);
+                        resolve(cinemaSeat);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        reject(errorThrown);
+                    }
+                });
+            });
+        }
     </script>
 }

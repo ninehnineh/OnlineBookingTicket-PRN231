@@ -46,7 +46,7 @@ namespace DataAccess.Configurations
 
             #region Booking
             CreateMap<Booking, CreateBookingDto>().ReverseMap();
-
+            CreateMap<Booking, BookingDto>().ReverseMap();
             #endregion
 
             #region Moive Show

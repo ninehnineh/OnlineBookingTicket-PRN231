@@ -31,5 +31,12 @@ namespace OnlineBookingTicketAPI.Controllers
 
             return Ok(booking);
         }
+
+        [EnableQuery]
+        public async Task<ActionResult> Get(string userId)
+        {
+            var booking = await repository.GetBookingAsync(userId);
+            return booking == null ? NotFound() : Ok(booking);
+        }
     }
 }
