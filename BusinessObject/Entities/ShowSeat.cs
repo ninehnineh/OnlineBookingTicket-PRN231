@@ -15,6 +15,8 @@ namespace BusinessObject.Entities
         [JsonIgnore]
         public MovieShow MovieShow { get; set; }
         public int CinemaSeatID { get; set; }
+        //[JsonIgnore]
+        //public CinemaSeat CinemaSeat { get; set; }
         public CinemaSeat CinemaSeat { get; set; }
 
     }

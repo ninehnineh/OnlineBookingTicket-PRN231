@@ -5,6 +5,7 @@ using OnlineBookingTicket.Models.CinemaSeatVMs;
 using OnlineBookingTicket.Models.MovieShowVMs;
 using OnlineBookingTicket.Models.ShowSeatVMs;
 using OnlineBookingTicket.Services;
+using System;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -28,17 +29,20 @@ namespace OnlineBookingTicket.Controllers
         }
 
 
-        public ActionResult SelectSeats(int movieShowId, int totalSeats, int cinemaHallId)
+        public ActionResult SelectSeats(int movieShowId, int totalSeats, int cinemaHallId,
+            DateTime dateShows)
         {
             var seats = Enumerable.Range(1, totalSeats);
+
             ViewBag.MovieShowId = movieShowId;
             ViewBag.cinemaHallId = cinemaHallId;
+            ViewBag.dateShows = dateShows.ToUniversalTime().ToString("O");
             return View(seats);
         }
-        public async Task<IActionResult> BookMovieShow(string[] seatSelection, int movieShowId, int cinemaHallId)
+        public async Task<IActionResult> BookMovieShow(string[] seatSelection, int movieShowId, int cinemaHallId, DateTime dateShow)
         {
             var cinemaSeatsId = new List<CreateCinemaSeatResponseVM>();
-
+            var bookDate = DateTime.Parse(dateShow.ToString());
             foreach (var seat in seatSelection)
             {
                 var cinemaSeat = new CreateCinemaSeatVM
@@ -46,6 +50,7 @@ namespace OnlineBookingTicket.Controllers
                     SeatNumber = (int)Int32.Parse(seat),
                     Type = 1,
                     CinemaHallID = cinemaHallId,
+                    BookDate = bookDate,
                 };
                 cinemaSeatsId.Add(CreateCinemaSeats(cinemaSeat).Result.Value);
             }

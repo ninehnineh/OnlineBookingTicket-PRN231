@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.CinemaSeat
+namespace DTO.MovieShow
 {
-    public class CreateCinemaSeatDto : BaseCinemaSeatDto
+    public class MovieShowDetailDto : BaseMovieShowDto, IBaseDto
     {
-        public DateTime BookDate { get; set; }
+        public int Id { get; set; }
+
     }
 }

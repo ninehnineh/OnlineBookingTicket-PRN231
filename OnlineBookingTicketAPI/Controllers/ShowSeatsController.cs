@@ -61,5 +61,12 @@ namespace OnlineBookingTicketAPI.Controllers
             return Updated(ci);
         }
 
+        [HttpGet("getShowSeatByMovieShowID/{movieShowID}")]
+        [EnableQuery]
+        public async Task<ActionResult> GetShowSeatByMovieShowID(int movieShowID)
+        {
+            var showSeats = await repository.GetShowSeatsAsync(movieShowID);
+            return showSeats == null ? NotFound() : Ok(showSeats);
+        }
     }
 }

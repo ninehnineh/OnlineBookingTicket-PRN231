@@ -63,10 +63,10 @@ td {
 .disabled-seat {
     background-color: green;
 }
-.available {
-    background-color: green;
-}
 
-.unavailable {
-    background-color: red;
+#btn-Book-Back {
+    align-items: baseline;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
 }
