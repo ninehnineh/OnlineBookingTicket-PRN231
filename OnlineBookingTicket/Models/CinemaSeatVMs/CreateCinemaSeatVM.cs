@@ -4,6 +4,7 @@
     {
         public int SeatNumber { get; set; }
         public int Type { get; set; }
+        public DateTime BookDate { get; set; }
 
         public int CinemaHallID { get; set; }
     }

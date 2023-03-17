@@ -21,6 +21,7 @@ namespace Repository.CinemaSeatRepository
         Task<ServiceResponse<string>> DeleteCinemaSeatAsync(int id);
 
         Task<CinemaSeat> UpdateCinemaSeatAsync(int id, UpdateCinemaSeatDto cinemaSeatDto);
-        Task<List<CinemaSeatDto>> GetCinemaSeatsAsync(int cinemaHallID);
+        Task<List<CinemaSeatDetailDTO>> GetCinemaSeatsAsync(int cinemaHallID);
+        Task<IQueryable<CinemaSeat>> GetCinemaSeatsAsyncV1(int cinemaHallID);
     }
 }

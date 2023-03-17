@@ -10,8 +10,8 @@ namespace BusinessObject.Entities
 
         public int CinemaID { get; set; }
         public Cinema Cinema { get; set; }
-        [JsonIgnore]
         public List<MovieShow> MovieShows { get; set; }
+        [JsonIgnore]
         public List<CinemaSeat> CinemaSeats { get; set; }
 
     }

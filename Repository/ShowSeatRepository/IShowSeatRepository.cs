@@ -18,5 +18,6 @@ namespace Repository.ShowSeatRepository
         Task<ShowSeat> updateshowSeatDto(UpdateShowSeatDto updateShowSeatDto);
 
         Task<ShowSeat> CreateShowSeatAsync(CreateShowSeatDto showSeatDto);
+        Task<List<ShowSeat>> GetShowSeatsAsync(int movieShowID);
     }
 }

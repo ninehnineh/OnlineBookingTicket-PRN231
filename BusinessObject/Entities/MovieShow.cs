@@ -13,6 +13,7 @@ namespace BusinessObject.Entities
         public int MovieID { get; set; }
         public Movie Movie { get; set; }
         public int CinemaHallID { get; set; }
+        [JsonIgnore]
         public CinemaHall CinemaHall { get; set; }
         public List<Booking> Bookings { get; set; }
         public List<ShowSeat> ShowSeats { get; set; }

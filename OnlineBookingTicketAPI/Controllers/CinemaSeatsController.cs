@@ -80,5 +80,19 @@ namespace OnlineBookingTicketAPI.Controllers
             var cinemaSeats = await repository.GetCinemaSeatsAsync(cinemaHallID);
             return cinemaSeats.Count == 0  ? NoContent() : Ok(cinemaSeats);
         }
+        
+        [HttpGet("getcinemaseatsOdata/{cinemaHallID}")]
+        [EnableQuery]
+        public async Task<IQueryable<CinemaSeat>> GetCinemaSeatsByHallIDV1(int cinemaHallID)
+        {
+            var cinemaSeats = await repository.GetCinemaSeatsAsyncV1(cinemaHallID);
+            return cinemaSeats;
+        }
+
+        //[HttpDelete("DeleteAll/{}")]
+        //public async Task<IActionResult> DeleteAll()
+        //{
+
+        //}
     }
 }

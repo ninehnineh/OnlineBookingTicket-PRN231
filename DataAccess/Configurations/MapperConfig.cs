@@ -36,12 +36,14 @@ namespace DataAccess.Configurations
             CreateMap<CinemaHall, CinemaHallDto>().ReverseMap();
             CreateMap<CinemaHall, CreateCinemaHallDto>().ReverseMap();
             CreateMap<CinemaHall, UpdateCinemaHallDto>().ReverseMap();
+            CreateMap<CinemaHall, CinemaHallDetailDto>().ReverseMap();
             #endregion
             
             #region CinemaSeat
             CreateMap<CinemaSeat, CinemaSeatDto>().ReverseMap();
             CreateMap<CinemaSeat, CreateCinemaSeatDto>().ReverseMap();
             CreateMap<CinemaSeat, UpdateCinemaSeatDto>().ReverseMap();
+            CreateMap<CinemaSeat, CinemaSeatDetailDTO>().ReverseMap();
             #endregion
 
             #region Booking
@@ -53,6 +55,7 @@ namespace DataAccess.Configurations
             CreateMap<MovieShow, MovieShowDto>().ReverseMap();
             CreateMap<MovieShow, CreateMovieShowDto>().ReverseMap();
             CreateMap<MovieShow, UpdateMovieShowDto>().ReverseMap();
+            CreateMap<MovieShow, MovieShowDetailDto>().ReverseMap();
             #endregion
 
             #region Moive
