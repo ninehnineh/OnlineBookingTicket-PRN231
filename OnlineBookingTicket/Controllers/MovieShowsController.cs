@@ -30,16 +30,22 @@ namespace OnlineBookingTicket.Controllers
 
 
         public ActionResult SelectSeats(int movieShowId, int totalSeats, int cinemaHallId,
-            DateTime dateShows)
+            DateTime dateShows, decimal PriceSeatOfShow)
         {
             var seats = Enumerable.Range(1, totalSeats);
 
             ViewBag.MovieShowId = movieShowId;
             ViewBag.cinemaHallId = cinemaHallId;
             ViewBag.dateShows = dateShows.ToUniversalTime().ToString("O");
+            ViewBag.Price = PriceSeatOfShow;
+            ViewBag.TotalSeats = totalSeats;
             return View(seats);
         }
-        public async Task<IActionResult> BookMovieShow(string[] seatSelection, int movieShowId, int cinemaHallId, DateTime dateShow)
+        public async Task<IActionResult> BookMovieShow(string[] seatSelection,
+            int movieShowId,
+            int cinemaHallId,
+            DateTime dateShow,
+            decimal totalPrice)
         {
             var cinemaSeatsId = new List<CreateCinemaSeatResponseVM>();
             var bookDate = DateTime.Parse(dateShow.ToString());
@@ -63,6 +69,7 @@ namespace OnlineBookingTicket.Controllers
                 MovieShowID = movieShowId,
                 NumberOfSeats = seatSelection.Length,
                 Timestamp = DateTime.Now,
+                totalPrice = totalPrice
             };
 
             var bookingId = CreateBooking(bookingVM).Result.Value.Id;
@@ -82,7 +89,8 @@ namespace OnlineBookingTicket.Controllers
                 await CreateShowSeat(showSeat);
             }
 
-            return View();
+            TempData["Message"] = "Book Successful";
+            return RedirectToAction("Index","Movies");
         }
         private async Task<ActionResult<CreateCinemaSeatResponseVM>> CreateCinemaSeats(CreateCinemaSeatVM cinemaSeat)
         {

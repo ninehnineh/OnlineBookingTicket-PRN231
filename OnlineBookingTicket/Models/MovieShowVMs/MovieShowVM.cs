@@ -11,8 +11,11 @@ namespace OnlineBookingTicket.Models.MovieShowVMs
         public DateTime Date { get; set; }
         public DateTime Starttime { get; set; }
         public DateTime Endtime { get; set; }
+        public decimal Price { get; set; }
 
         public int MovieID { get; set; }
+        public MovieVM Movie { get; set; }
+
         public int CinemaHallID { get; set; }
         public CinemaHallVM CinemaHall { get; set; }
     }

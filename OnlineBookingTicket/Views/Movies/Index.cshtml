@@ -6,7 +6,15 @@
 }
 
 <h1>Movies</h1>
+@if (TempData["Message"] != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@TempData["Message"].ToString()");
+        };
 
+    </script>
+}
 <div class="row">
     @foreach (var item in Model)
     {

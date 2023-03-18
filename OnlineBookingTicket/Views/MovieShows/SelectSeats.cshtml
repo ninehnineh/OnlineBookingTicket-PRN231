@@ -53,7 +53,7 @@
 
         <table class="center-screen-table" action="">
             <tbody>
-                    @for (int i = 1; i <= 50; i++)
+                    @for (int i = 1; i <= ViewBag.TotalSeats; i++)
                     {
 
                         if (i % 5 == 1)
@@ -80,7 +80,8 @@
             </tbody>
                     <td>
                         <div id="total-price">
-                            Total price: $0
+                            Total price: $<span id="total-price-display">0</span>
+                            <input type="hidden" name="totalPrice" id="total-Price-Input" value="0" />
                         </div>
                     </td>
             <tfoot>
@@ -161,10 +162,12 @@
         var totalPrice = 0;
         var checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
         for (var i = 0; i < checkedBoxes.length; i++) {
-            totalPrice += parseFloat(100); // thay chỗ này thành price mà manager tạo khi lên lịch chiếu
+            totalPrice += parseFloat(@(ViewBag.Price)); // thay chỗ này thành price mà manager tạo khi lên lịch chiếu
         }
-        document.getElementById('total-price').innerHTML = 'Total price: $' + totalPrice;
+        document.getElementById('total-price-display').innerHTML = totalPrice;
+        document.getElementById('total-Price-Input').value = totalPrice;
     }
     </script>
 
 }
+

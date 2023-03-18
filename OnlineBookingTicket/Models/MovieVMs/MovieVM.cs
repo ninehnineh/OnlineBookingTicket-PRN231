@@ -1,4 +1,5 @@
-﻿using OnlineBookingTicket.Models.MovieShowVMs;
+﻿using Newtonsoft.Json;
+using OnlineBookingTicket.Models.MovieShowVMs;
 
 namespace OnlineBookingTicket.Models.MovieVMs
 {
@@ -13,7 +14,7 @@ namespace OnlineBookingTicket.Models.MovieVMs
         public DateTime ReleaseDate { get; set; }
         public string Country { get; set; }
         public string Genre { get; set; }
-
+        [JsonIgnore]
         public List<MovieShowVM> MovieShows { get; set; }
     }
 }
