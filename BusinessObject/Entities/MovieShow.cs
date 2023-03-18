@@ -8,6 +8,7 @@ namespace BusinessObject.Entities
         public DateTime Date { get; set; }
         public DateTime Starttime { get; set; }
         public DateTime Endtime { get; set; }
+        public decimal Price { get; set; }
 
 
         public int MovieID { get; set; }
