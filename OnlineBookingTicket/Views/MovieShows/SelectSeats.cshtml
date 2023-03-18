@@ -76,7 +76,13 @@
                            @:</row>
                         }
                     }
+
             </tbody>
+                    <td>
+                        <div id="total-price">
+                            Total price: $0
+                        </div>
+                    </td>
             <tfoot>
                 <tr>
                     <td>
@@ -90,8 +96,9 @@
                 </tr>
             </tfoot>
         </table>
+
         <div id="btn-Book-Back">
-            <button type="submit" class="btn btn-primary">Book</button>
+            <button id="book-btn" disabled type="submit" class="btn btn-primary">Book</button>
             <a asp-action="Index" asp-controller="Movies">Back</a>
         </div>
    </form>
@@ -115,9 +122,9 @@
 
         function getCinemaSeat(cinemaHallID, seatNumber, movieShowId) {
             return new Promise(function(resolve, reject) {
-                var uio = `https://localhost:7099/getShowSeatByMovieShowID/${movieShowId}`;
+                var url = `https://localhost:7099/getShowSeatByMovieShowID/${movieShowId}`;
                 $.ajax({
-                    url: uio,
+                    url: url,
                     type: 'GET',
                     dataType: 'json',
                     success: function(cinemaSeats) {
@@ -131,6 +138,33 @@
                 });
             });
         }
+
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener('change', function() {
+                updateTotalPrice();
+            var bookBtn = document.getElementById('book-btn');
+            if (this.checked) {
+                bookBtn.disabled = false;
+            } else {
+                // Kiểm tra xem còn ô checkbox nào được chọn hay không
+                var checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                if (checkedBoxes.length === 0) {
+                    bookBtn.disabled = true;
+                }
+            }
+        });
+
+
+    }
+    function updateTotalPrice() {
+        var totalPrice = 0;
+        var checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        for (var i = 0; i < checkedBoxes.length; i++) {
+            totalPrice += parseFloat(100); // giả sử giá của mỗi ghế là giá trị của checkbox
+        }
+        document.getElementById('total-price').innerHTML = 'Total price: $' + totalPrice;
+    }
     </script>
 
 }
