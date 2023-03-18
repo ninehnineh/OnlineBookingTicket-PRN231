@@ -88,7 +88,9 @@ namespace OnlineBookingTicket.Controllers
                 ReleaseDate = (DateTime)temp["releaseDate"],
                 MovieShows = (List<MovieShowVM>)temp["movieShows"].ToObject<List<MovieShowVM>>(),
             };
-            
+            //var a = await GetBookingAsync(GetAuthenticatedUserId());
+            //ViewBag.UserID = GetAuthenticatedUserId();
+            //ViewBag.MovieShowID = a.MovieShowID;
             return View(movie);
         }
 

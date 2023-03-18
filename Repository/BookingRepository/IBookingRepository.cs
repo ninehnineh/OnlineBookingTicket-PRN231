@@ -13,5 +13,7 @@ namespace Repository.BookingRepository
     {
         Task<CreateBookingResponse> BookingAsync(CreateBookingDto bookingDto);
         Task<BookingDto> GetBookingAsync(string userId);
+        Task<BookingDto> GetBookingByUserIdAndMovieShowIdAsync(string userId, int movieShowId);
+        Task<List<BookingDto>> GetBookingsAsync(string userId);
     }
 }

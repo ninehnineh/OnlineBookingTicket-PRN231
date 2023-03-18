@@ -4,6 +4,7 @@
     {
         public int NumberOfSeats { get; set; }
         public DateTime Timestamp { get; set; }
+        public decimal totalPrice { get; set; }
 
         public int MovieShowID { get; set; }
 

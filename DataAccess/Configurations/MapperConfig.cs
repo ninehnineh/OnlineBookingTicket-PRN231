@@ -56,12 +56,14 @@ namespace DataAccess.Configurations
             CreateMap<MovieShow, CreateMovieShowDto>().ReverseMap();
             CreateMap<MovieShow, UpdateMovieShowDto>().ReverseMap();
             CreateMap<MovieShow, MovieShowDetailDto>().ReverseMap();
+            CreateMap<MovieShow, ListMovieShowDto>().ReverseMap();
             #endregion
 
             #region Moive
             CreateMap<Movie, MovieDto>().ReverseMap();
             CreateMap<Movie, CreateMovieDto>().ReverseMap();
             CreateMap<Movie, UpdateMovieDto>().ReverseMap();
+            CreateMap<Movie, ListMovieDto>().ReverseMap();
             #endregion
             
             #region Show Seat

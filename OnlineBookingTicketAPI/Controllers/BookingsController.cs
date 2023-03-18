@@ -32,10 +32,28 @@ namespace OnlineBookingTicketAPI.Controllers
             return Ok(booking);
         }
 
+        [HttpGet("getbooking/{userId}")]
         [EnableQuery]
         public async Task<ActionResult> Get(string userId)
         {
             var booking = await repository.GetBookingAsync(userId);
+            return booking == null ? NotFound() : Ok(booking);
+        }
+
+        [HttpGet("getbooking/{userId}/movieshow/{movieShowId}")]
+        [EnableQuery]
+        public async Task<ActionResult<List<BookingDto>>> GetBooking(string userId, int movieShowId)
+        {
+            var booking = await repository
+                .GetBookingByUserIdAndMovieShowIdAsync(userId, movieShowId);
+            return booking == null ? NotFound() : Ok(booking);
+        }
+
+        [HttpGet("getbookingsbyUserId/{userId}")]
+        [EnableQuery]
+        public async Task<ActionResult> GetBookingsByUserID(string userId)
+        {
+            var booking = await repository.GetBookingsAsync(userId);
             return booking == null ? NotFound() : Ok(booking);
         }
     }

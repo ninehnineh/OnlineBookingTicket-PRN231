@@ -8,5 +8,7 @@ namespace DTO.Booking
 {
     public class CreateBookingDto : BaseBookingDto
     {
+        public decimal totalPrice { get; set; }
+
     }
 }

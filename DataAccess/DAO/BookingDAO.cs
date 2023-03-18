@@ -43,5 +43,30 @@ namespace DataAccess.DAO
 
             return _mapper.Map<BookingDto>(booking);
         }
+
+        public async Task<BookingDto> GetBookingByUserIdAndMovieShowIdAsync(string userId, int movieShowId)
+        {
+            var booking = await _context.Bookings
+                .Include(x => x.MovieShow)
+                .FirstOrDefaultAsync(x => x.AppUserID == userId && x.MovieShowID == movieShowId);
+
+            return _mapper.Map<BookingDto>(booking);
+        }
+
+
+
+        public async Task<List<BookingDto>> GetBookingsAsync(string userId)
+        {
+            var booking = await _context.Bookings
+                .Include(x => x.MovieShow)
+                .ThenInclude(x => x.Movie)
+                .Include(x => x.MovieShow.CinemaHall)
+                .Include(x => x.ShowSeats)
+                .ThenInclude(x => x.CinemaSeat)
+                .Where(x => x.AppUserID == userId)
+                .ToListAsync();
+
+            return _mapper.Map<List<BookingDto>>(booking);
+        }
     }
 }
