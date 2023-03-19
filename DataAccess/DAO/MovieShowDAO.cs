@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DTO.MovieShow;
+using DataAccess.Exceptions;
 
 namespace DataAccess.DAO
 {
@@ -16,7 +17,6 @@ namespace DataAccess.DAO
     {
         private OnlineBookingTicketDbContext _context;
         private readonly IMapper _mapper;
-
         public MovieShowDAO(OnlineBookingTicketDbContext context, IMapper mapper)
         {
             _context = context;
@@ -85,20 +85,69 @@ namespace DataAccess.DAO
 
         public async Task<MovieShow> CreateMovieShowAsync(CreateMovieShowDto movieShowDto)
         {
-            try
+           
+            var listMovieShow = await GetMovieShowsAsync();
+            MovieShow movieShow = _mapper.Map<MovieShow>(movieShowDto);
+            var checkDate = listMovieShow.FirstOrDefault(x => x.Date.Date == movieShowDto.Date.Date);
+            var checkStartTime = listMovieShow.FirstOrDefault(x => x.Starttime == movieShowDto.Starttime);
+            var checkStartTimeEqualEndTime = listMovieShow.FirstOrDefault(x => x.Endtime == movieShowDto.Starttime);
+            var checkEndTime = listMovieShow.FirstOrDefault(x => x.Starttime == movieShowDto.Endtime);
+            var checkEndTimeEqualStartTime = listMovieShow.FirstOrDefault(x => x.Endtime == movieShowDto.Endtime);
+            int result = movieShowDto.Endtime.Hour - movieShowDto.Starttime.Hour;
+            int time = DateTime.Compare(movieShowDto.Endtime, movieShowDto.Starttime);
+            if (movieShowDto.Starttime >= movieShowDto.Endtime)
             {
-                MovieShow movieShow = _mapper.Map<MovieShow>(movieShowDto);
-
-                await _context.MovieShows.AddAsync(movieShow);
-                await _context.SaveChangesAsync();
-
-                return movieShow;
+                throw new BadRequestException("Error time");
             }
-            catch (Exception e)
+            else if (time == 0)
             {
-                throw new Exception(e.Message);
+                throw new BadRequestException("Error start is the same time as endtime");
             }
+            else if (time < 0)
+            {
+                throw new BadRequestException("Error start is earlier than endtime");
+            }
+            else if (result <= 1)
+            {
+                throw new BadRequestException("Too Short");
+            }
+            else
+            {
+                if (checkDate != null)
+                {
+                    if (checkStartTime != null || checkStartTimeEqualEndTime != null || checkEndTime != null || checkEndTimeEqualStartTime != null)
+                    {
+                            throw new BadRequestException("Error time");
+
+                    }
+                    else
+                    {
+                        foreach (var item in listMovieShow)
+                        {
+                            if(item.Date.Date == checkDate.Date.Date)
+                            {
+                            if (movieShowDto.Starttime <= item.Endtime && movieShowDto.Starttime >= item.Starttime)
+                            {
+                                throw new BadRequestException("Error time");
+
+                            }
+                            else if (movieShowDto.Endtime <= item.Endtime && movieShowDto.Endtime >= item.Starttime)
+                            {
+                                throw new BadRequestException("Error time");
+
+                            }
+                        }
+                        }
+                    }
+                }
+            }
+            await _context.MovieShows.AddAsync(movieShow);
+            await _context.SaveChangesAsync();
+               
+            return movieShow;
+            }
+            
         }
     }
-}
+
 

@@ -12,7 +12,7 @@ namespace Repository.MovieShowRepository
 {
     public interface IMovieShowRepository
     {
-        Task<ServiceResponse<List<MovieShow>>> GetMovieShows();
+        Task<List<MovieShow>> GetMovieShows();
 
         Task<MovieShow> AddMovieShow(CreateMovieShowDto movieShowDto);
 

@@ -50,16 +50,11 @@ namespace Repository.MovieShowRepository
             return movieShow;
         }
 
-        public async Task<ServiceResponse<List<MovieShow>>> GetMovieShows()
+        public async Task<List<MovieShow>> GetMovieShows()
         {
             var movieShows = await _movieShowDAO.GetAllAsync();
 
-            return new ServiceResponse<List<MovieShow>>()
-            {
-                Data = movieShows,
-                Success = true,
-                Message = "Movie Show List"
-            };
+            return movieShows;
         }
 
         public async Task<MovieShow> UpdateMovieShowAsync(int id, UpdateMovieShowDto movieShowDto)

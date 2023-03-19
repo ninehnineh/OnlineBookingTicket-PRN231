@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/OnlineBookingTicket.styles.css" asp-append-version="true" />
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/timepicker/jquery.timepicker.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css" integrity="sha512-2FLnY3ihN1uT34vIt9iSdf8SAdDEp7PZjCvMx7Dcz8z1bG7Hm+2/Zn9dF42tCjK7tp+0EmjJv7FTzDGi8HjsOQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </environment>
 </head>
 <body>
     <header>
@@ -31,6 +37,12 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="MovieShows" asp-action="Index"> Movie Show</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cities" asp-action="Index"> City</a>
                             </li>
                         }
                         @if (HttpContextAccessor.HttpContext.User.Claims.Any(x=>x.Value == "Admin"))
@@ -59,6 +71,14 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/timepicker/jquery.timepicker.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-XXXXXXXXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js" integrity="sha512-btTxJyBh2dMSev+v8e16sVbNncdtR/hTkV1vrl8w2qVvpwwCJ1/7VbT8T/yT/p7jnfZO/FZsAamv1z4Qwq0YiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </environment>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

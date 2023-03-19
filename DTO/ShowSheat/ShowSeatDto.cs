@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace DTO.ShowSheat
 {
-    public class ShowSeatDto
+    public class ShowSeatDto : BaseSheatDto,IBaseDto
     {
+        public int Id { get; set; }
     }
 }

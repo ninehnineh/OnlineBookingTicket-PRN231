@@ -44,16 +44,11 @@ namespace Repository.Repository
             };
         }
 
-        public async Task<ServiceResponse<List<City>>> GetCities()
+        public async Task<List<City>> GetCities()
         {
             var cities = await _cityDAO.GetAllAsync();
 
-            return new ServiceResponse<List<City>>()
-            {
-                Data = cities,
-                Success = true,
-                Message = "Cinema List"
-            };
+           return cities;
         }
 
         public async Task<City> GetCityByIdAsync(int id)

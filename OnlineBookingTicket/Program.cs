@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using OnlineBookingTicket.Contracts;
 using OnlineBookingTicket.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using BusinessObject;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<OnlineBookingTicketDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("OnlineBookingTicketContext") ?? throw new InvalidOperationException("Connection string 'OnlineBookingTicketContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>

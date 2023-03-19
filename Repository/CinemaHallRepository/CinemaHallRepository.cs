@@ -49,16 +49,11 @@ namespace Repository.CinemaHallRepository
             return cinemaHall;
         }
 
-        public async Task<ServiceResponse<List<CinemaHall>>> GetCinemaHalls()
+        public async Task<List<CinemaHall>> GetCinemaHalls()
         {
             var cinemaHalls = await _cinemaHallDAO.GetAllAsync();
 
-            return new ServiceResponse<List<CinemaHall>>()
-            {
-                Data = cinemaHalls,
-                Success = true,
-                Message = "Cinema Hall List"
-            };
+           return cinemaHalls;
         }
 
         public async Task<CinemaHall> UpdateCinemaHallAsync(int id, UpdateCinemaHallDto cinemaHallDto)
