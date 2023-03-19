@@ -12,7 +12,7 @@ namespace Repository.IRepository
 {
     public interface ICityRepository
     {
-        Task<ServiceResponse<List<City>>> GetCities();
+        Task<List<City>> GetCities();
 
         Task<City> GetCityByIdAsync(int id);
 

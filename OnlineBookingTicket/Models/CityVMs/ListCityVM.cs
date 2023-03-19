@@ -1,6 +1,6 @@
 ﻿namespace OnlineBookingTicket.Models.CityVMs
 {
-    public class CityVM
+    public class ListCityVM
     {
         public int Id { get; set; }
 

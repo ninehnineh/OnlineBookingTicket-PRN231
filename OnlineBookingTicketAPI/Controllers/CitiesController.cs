@@ -25,7 +25,7 @@ namespace OnlineBookingTicketAPI.Controllers
 
 
         [EnableQuery(PageSize = 1)]
-        public async Task<ActionResult<ServiceResponse<List<City>>>> Get()
+        public async Task<ActionResult<List<City>>> Get()
         {
             var list = await repository.GetCities();
             return Ok(list);

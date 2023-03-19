@@ -26,7 +26,7 @@ namespace OnlineBookingTicketAPI.Controllers
 
 
         [EnableQuery(PageSize = 1)]
-        public async Task<ActionResult<ServiceResponse<List<CinemaHall>>>> Get()
+        public async Task<ActionResult<List<CinemaHall>>> Get()
         {
             var list = await repository.GetCinemaHalls();
             return Ok(list);

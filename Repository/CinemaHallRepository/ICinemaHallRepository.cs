@@ -12,7 +12,7 @@ namespace Repository.CinemaHallRepository
 {
     public interface ICinemaHallRepository
     {
-        Task<ServiceResponse<List<CinemaHall>>> GetCinemaHalls();
+        Task<List<CinemaHall>> GetCinemaHalls();
 
         Task<CinemaHall> AddCinemaHallAsync(CreateCinemaHallDto cinemaDto);
 

@@ -43,9 +43,58 @@ namespace OnlineBookingTicketAPI.Controllers
         public async Task<IActionResult> Post([FromBody] CreateMovieShowDto movieShowDto)
         {
 
+            var movieShows = await repository.GetMovieShowsAsync();
+            var checkDate = movieShows.FirstOrDefault(x => x.Date == movieShowDto.Date);
+            var checkStartTime =  movieShows.FirstOrDefault(x => x.Starttime == movieShowDto.Starttime);
+            var checkStartTimeEqualEndTime =  movieShows.FirstOrDefault(x => x.Endtime == movieShowDto.Starttime);
+            var checkEndTime =  movieShows.FirstOrDefault(x => x.Starttime == movieShowDto.Endtime);
+            var checkEndTimeEqualStartTime =  movieShows.FirstOrDefault(x => x.Endtime == movieShowDto.Endtime);
+            int result = movieShowDto.Endtime.Hour - movieShowDto.Starttime.Hour;
+            int time = DateTime.Compare(movieShowDto.Endtime, movieShowDto.Starttime);
+            if (movieShowDto.Starttime >= movieShowDto.Endtime)
+            {
+                return BadRequest("Error time");
+            }
+            else if (time == 0)
+            {
+                BadRequest("Error start is the same time as endtime");
+            }
+            else if (time < 0)
+            {
+                BadRequest("Error start is earlier than endtime");
+            }
+            else if (result <= 1)
+            {
+                BadRequest("Too Short");
+            }
+            else
+            {
+                if(checkDate != null)
+                {
+                    if (checkStartTime != null || checkStartTimeEqualEndTime != null || checkEndTime != null || checkEndTimeEqualStartTime != null)
+                    {
+                        return BadRequest("Error time");
+
+                    }
+                    else 
+                    {
+                        foreach (var item in movieShows)
+                        {
+                            if(movieShowDto.Starttime <= item.Endtime && movieShowDto.Starttime >= item.Starttime)
+                            {
+                                return BadRequest("Error time");
+
+                            }else if(movieShowDto.Endtime <= item.Endtime && movieShowDto.Endtime >= item.Starttime)
+                            {
+                                return BadRequest("Error time");
+
+                            }
+                        }
+                    }
+                }
+            }
             await repository.AddMovieShow(movieShowDto);
             var model = _mapper.Map<MovieShow>(movieShowDto);
-
             return Created(model);
         }
 
