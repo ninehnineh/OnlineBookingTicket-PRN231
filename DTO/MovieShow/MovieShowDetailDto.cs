@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DTO.MovieShow
 {
-    public class MovieShowDto : BaseMovieShowDto,IBaseDto
+    public class MovieShowDetailDto : BaseMovieShowDto, IBaseDto
     {
         public int Id { get; set; }
-        public decimal Price { get; set; }
+
     }
 }

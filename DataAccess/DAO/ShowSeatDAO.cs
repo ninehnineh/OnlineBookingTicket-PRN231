@@ -30,6 +30,15 @@ namespace DataAccess.DAO
             return await _context.ShowSeats.ToListAsync();
         }
 
+        public async Task<List<ShowSeat>> GetShowSeatsAsync(int movieShowID)
+        {
+
+            return await _context.ShowSeats
+                .Include(x => x.CinemaSeat)
+                .Where(x => x.MovieShowID == movieShowID)
+                .ToListAsync();
+        }
+
         public async Task<ShowSeat> GetShowSeatByIdAsync(int id)
         {
             var showSeat = await _context.ShowSeats.SingleOrDefaultAsync(x => x.Id == id);

@@ -8,5 +8,6 @@ namespace DTO.CinemaSeat
 {
     public class CreateCinemaSeatDto : BaseCinemaSeatDto
     {
+        public DateTime BookDate { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using BusinessObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(OnlineBookingTicketDbContext))]
-    partial class OnlineBookingTicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230316053755_AddedBookDatePropertyToCinemaSeat")]
+    partial class AddedBookDatePropertyToCinemaSeat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +86,7 @@ namespace BusinessObject.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "63897c1e-3fa9-48e1-b694-6096c9b440da",
+                            ConcurrencyStamp = "7eaaba37-78ea-4016-b938-0429f76cf9a9",
                             Email = "Customer@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "System",
@@ -92,9 +94,9 @@ namespace BusinessObject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CUSTOMER@LOCALHOST.COM",
                             NormalizedUserName = "CUSTOMER@LOCALHOST.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL3BeMsvk08Jyfo2Ncch/4QsYmnRxZcsF6OOxIeoFZJfx8ClI89pfmMV2MKu6Amkog==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEARzQQuzyutPh3g1TKAezEFBYYVbaYiy7B9EVabWxA6dH2xOFIacbm/8Ne5u/4/OTQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "418dcb71-a817-44dd-8adf-2dd9da534661",
+                            SecurityStamp = "ac12d3b8-4e6b-45f8-858b-8bbee15ef85b",
                             TwoFactorEnabled = false,
                             UserName = "Customer@localhost.com"
                         },
@@ -102,7 +104,7 @@ namespace BusinessObject.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9b8db1f8-688d-48c5-85ef-51b77f85ba65",
+                            ConcurrencyStamp = "f3207d67-caaa-4c4d-9dd3-b96073ae1001",
                             Email = "Manager@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "System",
@@ -110,9 +112,9 @@ namespace BusinessObject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER@LOCALHOST.COM",
                             NormalizedUserName = "MANAGER@LOCALHOST.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEYPYLYkqO57Ntv31B2BZ0Fm5hUWpN9p2EVSnnBuYUKEFYjbfaXsuXXiNOG284QWVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECHAwZyfyUxVWQ9s16dVNMtaaZ1YiqXoiLMZ4ZcDIABYNnXb4+qOY/DM/YnjqGG20Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2791228c-973e-4d20-9e85-70c5e5dced4d",
+                            SecurityStamp = "d04e22b9-1a19-4a05-ada8-5acd4fd8b1a3",
                             TwoFactorEnabled = false,
                             UserName = "Manager@localhost.com"
                         });
@@ -139,9 +141,6 @@ namespace BusinessObject.Migrations
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("date");
-
-                    b.Property<decimal>("totalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -319,9 +318,6 @@ namespace BusinessObject.Migrations
                     b.Property<int>("MovieID")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("Starttime")
                         .HasColumnType("datetime");
 
@@ -391,14 +387,14 @@ namespace BusinessObject.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "26ed6469-21e7-4b10-b669-6cad0f2dabcf",
+                            ConcurrencyStamp = "4a4c5c36-d536-4f88-9b39-a620ecd41fee",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "5f09e59f-6344-43c1-afac-6824b8d99a2f",
+                            ConcurrencyStamp = "5f3ac53b-90bc-4065-9048-c23295b021ec",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });

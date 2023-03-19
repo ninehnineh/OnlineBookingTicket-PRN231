@@ -52,5 +52,12 @@ namespace Repository.ShowSeatRepository
             var showSeat = await _showSeatDAO.updateshowSeatDto(updateShowSeatDto);
             return showSeat;
         }
+
+        public async Task<List<ShowSeat>> GetShowSeatsAsync(int movieShowID)
+        {
+            var showseats = await _showSeatDAO.GetShowSeatsAsync(movieShowID);
+            return showseats;
+        }
+
     }
 }

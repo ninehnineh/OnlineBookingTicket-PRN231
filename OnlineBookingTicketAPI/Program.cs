@@ -67,7 +67,8 @@ builder.Services.AddIdentity<AppUsers, IdentityRole>()
 
 
 builder.Services.AddControllers().AddOData(options =>
-options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
+options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100)
+.AddRouteComponents("odata", GetEdmModel()));
 
 static IEdmModel GetEdmModel()
 {

@@ -24,7 +24,7 @@ namespace OnlineBookingTicketAPI.Controllers
             this._mapper = mapper;
         }
 
-
+        [HttpGet("getall")]
         [EnableQuery(PageSize = 1)]
         public async Task<ActionResult<ServiceResponse<List<CinemaSeat>>>> Get()
         {
@@ -72,5 +72,27 @@ namespace OnlineBookingTicketAPI.Controllers
             await repository.DeleteCinemaSeatAsync(key);
             return Ok();
         }
+
+        [HttpGet("getcinemaseats/{cinemaHallID}")]
+        [EnableQuery]
+        public async Task<ActionResult> GetCinemaSeatsByHallID(int cinemaHallID)
+        {
+            var cinemaSeats = await repository.GetCinemaSeatsAsync(cinemaHallID);
+            return cinemaSeats.Count == 0  ? NoContent() : Ok(cinemaSeats);
+        }
+        
+        [HttpGet("getcinemaseatsOdata/{cinemaHallID}")]
+        [EnableQuery]
+        public async Task<IQueryable<CinemaSeat>> GetCinemaSeatsByHallIDV1(int cinemaHallID)
+        {
+            var cinemaSeats = await repository.GetCinemaSeatsAsyncV1(cinemaHallID);
+            return cinemaSeats;
+        }
+
+        //[HttpDelete("DeleteAll/{}")]
+        //public async Task<IActionResult> DeleteAll()
+        //{
+
+        //}
     }
 }

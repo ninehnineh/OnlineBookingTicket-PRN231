@@ -30,5 +30,20 @@ namespace Repository.BookingRepository
 
             return bookings;
         }
+
+        public async Task<BookingDto> GetBookingAsync(string userId)
+        {
+            return await _bookingDAO.GetBookingAsync(userId);
+        }
+
+        public async Task<List<BookingDto>> GetBookingsAsync(string userId)
+        {
+            return await _bookingDAO.GetBookingsAsync(userId);
+        }
+
+        public async Task<BookingDto> GetBookingByUserIdAndMovieShowIdAsync(string userId, int movieShowId)
+        {
+            return await _bookingDAO.GetBookingByUserIdAndMovieShowIdAsync(userId, movieShowId);
+        }
     }
 }

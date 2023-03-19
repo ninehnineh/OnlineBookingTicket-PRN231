@@ -4,6 +4,7 @@ using BusinessObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(OnlineBookingTicketDbContext))]
-    partial class OnlineBookingTicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230318085533_AddedPricePropertyToMovieShow")]
+    partial class AddedPricePropertyToMovieShow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +86,7 @@ namespace BusinessObject.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "63897c1e-3fa9-48e1-b694-6096c9b440da",
+                            ConcurrencyStamp = "a9ed2370-8a49-4fa8-9e50-c1f7f1c60cf4",
                             Email = "Customer@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "System",
@@ -92,9 +94,9 @@ namespace BusinessObject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CUSTOMER@LOCALHOST.COM",
                             NormalizedUserName = "CUSTOMER@LOCALHOST.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL3BeMsvk08Jyfo2Ncch/4QsYmnRxZcsF6OOxIeoFZJfx8ClI89pfmMV2MKu6Amkog==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAFeYlSUR9ONORfwVOO3sq/YG/1U6eT1Lhmu7tIZmWEUy9HQPrkRP/wQCGE475lR1A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "418dcb71-a817-44dd-8adf-2dd9da534661",
+                            SecurityStamp = "e50b528b-8b74-4f1e-82c5-5a9f336a5ad4",
                             TwoFactorEnabled = false,
                             UserName = "Customer@localhost.com"
                         },
@@ -102,7 +104,7 @@ namespace BusinessObject.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9b8db1f8-688d-48c5-85ef-51b77f85ba65",
+                            ConcurrencyStamp = "a76b31b0-525e-48cc-9dd8-7ea4469b4d7f",
                             Email = "Manager@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "System",
@@ -110,9 +112,9 @@ namespace BusinessObject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER@LOCALHOST.COM",
                             NormalizedUserName = "MANAGER@LOCALHOST.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEYPYLYkqO57Ntv31B2BZ0Fm5hUWpN9p2EVSnnBuYUKEFYjbfaXsuXXiNOG284QWVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENha3gGSpSAHvVhyaISR/JkbzMHVGXO4FkVn1KBm5/9cZDteUf4on6baErrUalUcFA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2791228c-973e-4d20-9e85-70c5e5dced4d",
+                            SecurityStamp = "279ca109-6eb6-476c-8bd1-f6eca3ca70a1",
                             TwoFactorEnabled = false,
                             UserName = "Manager@localhost.com"
                         });
@@ -139,9 +141,6 @@ namespace BusinessObject.Migrations
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("date");
-
-                    b.Property<decimal>("totalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -391,14 +390,14 @@ namespace BusinessObject.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "26ed6469-21e7-4b10-b669-6cad0f2dabcf",
+                            ConcurrencyStamp = "8b509840-765d-461d-8915-54529930baf1",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "5f09e59f-6344-43c1-afac-6824b8d99a2f",
+                            ConcurrencyStamp = "1ac3c5bb-69fb-44f7-8aba-8d9a4e811b3e",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });

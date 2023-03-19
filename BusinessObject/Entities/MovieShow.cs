@@ -8,11 +8,13 @@ namespace BusinessObject.Entities
         public DateTime Date { get; set; }
         public DateTime Starttime { get; set; }
         public DateTime Endtime { get; set; }
+        public decimal Price { get; set; }
 
 
         public int MovieID { get; set; }
         public Movie Movie { get; set; }
         public int CinemaHallID { get; set; }
+        [JsonIgnore]
         public CinemaHall CinemaHall { get; set; }
         public List<Booking> Bookings { get; set; }
         public List<ShowSeat> ShowSeats { get; set; }

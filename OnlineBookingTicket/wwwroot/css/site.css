@@ -59,3 +59,14 @@ td {
         #seatSelection .seat.unavailable {
             background-color: red;
         }
+
+.disabled-seat {
+    background-color: green;
+}
+
+#btn-Book-Back {
+    align-items: baseline;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+}

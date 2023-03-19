@@ -9,15 +9,17 @@
 <h1>@Html.DisplayFor(model => model.Title)</h1>
 
 @*<div class="row">
-    <div class="col-md-4 col-sm-4 col-xs-8 col-xs-offset-2 col-md-offset-0">
-        <div class="">
-            <img src="../../Image/@Model.Image" alt="Card image cap"
-                 style="max-width: 800px; max-height: 400px;">
-        </div>
+    <div class="col-md-6">
+        <img src="../../Image/@Model.Image" alt="Card image cap"
+             style="max-width: 500px; max-height: 400px;">
     </div>
-    <div class="col-md-8 col-sm-8 col-xs-12">
-
-        <h2>@Html.DisplayFor(model => model.Title)</h2>
+    <div class="col-sm-6">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DurationInMinutes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DurationInMinutes)
+        </dd>
 
     </div>
 </div>*@
@@ -89,20 +91,27 @@
                 <tbody>
                     @foreach (var movieShow in Model.MovieShows)
                     {
-                        <tr>
-                            <td>@movieShow.CinemaHall.Name</td>
-                            <td>@movieShow.Date.ToString("dd/MM/yyyy")</td>
-                            <td>@movieShow.Starttime.ToString("hh:mm tt")</td>
-                            <td>@movieShow.Endtime.ToString("hh:mm tt")</td>
-                            <td>
-                                <form action="@Url.Action("SelectSeats", "MovieShows")" method="post">
-                                    <input type="hidden" name="movieShowId" value="@movieShow.Id" />
-                                    <input type="hidden" name="cinemaHallId" value="@movieShow.CinemaHallID" />
-                                    <input type="hidden" name="totalSeats" value="@movieShow.CinemaHall.Totalseats" />
-                                    <button type="submit" class="btn btn-primary">Buy Ticket</button>
-                                </form>
-                            </td>
-                        </tr>
+                        var showDate = DateTime.Parse(movieShow.Date.ToString());
+                        var currentDate = DateTime.Parse(DateTime.Now.ToString());
+                        @if (showDate >= currentDate)
+                        {
+                            <tr>
+                                <td>@movieShow.CinemaHall.Name</td>
+                                <td>@movieShow.Date.ToString("dd/MM/yyyy")</td>
+                                <td>@movieShow.Starttime.ToString("hh:mm tt")</td>
+                                <td>@movieShow.Endtime.ToString("hh:mm tt")</td>
+                                <td>
+                                    <form action="@Url.Action("SelectSeats", "MovieShows")" method="post">
+                                        <input type="hidden" name="movieShowId" value="@movieShow.Id" />
+                                        <input type="hidden" name="cinemaHallId" value="@movieShow.CinemaHallID" />
+                                        <input type="hidden" name="dateShows" value="@movieShow.Date" />
+                                        <input type="hidden" name="PriceSeatOfShow" value="@movieShow.Price" />
+                                        <input type="hidden" name="totalSeats" value="@movieShow.CinemaHall.Totalseats" />
+                                        <button id="buyTicketButton" type="submit" class="btn btn-primary">Buy Ticket</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
@@ -116,3 +125,22 @@
     }
     <a asp-action="Index">Back</a>
 </div>
+@section Scripts{
+    <script>
+        //document.addEventListener('DOMContentLoaded', function () {
+        //    const buyTicketButton = document.querySelector('#buyTicketButton');
+        //    $.ajax({
+        //        url: `https://localhost:7099/getbooking/${"@(ViewBag.UserID)"}/movieshow/${@(ViewBag.MovieShowID)}`,
+        //        type: 'GET',
+        //        success: function (data) {
+        //            if (data !== null) {
+        //                buyTicketButton.disabled = true;
+        //            }
+        //        },
+        //        error: function (xhr, status, error) {
+        //            console.log('Error:', error);
+        //        }
+        //    });
+        //});
+    </script>
+}

@@ -17,6 +17,5 @@ namespace OnlineBookingTicket.Models.MovieVMs
         public string Country { get; set; }
         public string Genre { get; set; }
         public List<MovieShowVM> MovieShows { get; set; }
-
     }
 }

@@ -6,7 +6,15 @@
 }
 
 <h1>Movies</h1>
+@if (TempData["Message"] != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@TempData["Message"].ToString()");
+        };
 
+    </script>
+}
 <div class="row">
     @foreach (var item in Model)
     {
@@ -15,7 +23,7 @@
                 <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Id">
                     <img class="card-img-top"
                      src="Image/@item.Image" alt="Card image cap">
-            </a>
+                </a>
                 <div class="card-body">
                     <h5 class="card-title">@item.Title</h5>
                 </div>

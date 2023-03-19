@@ -7,10 +7,13 @@ namespace OnlineBookingTicket.Models.BookingVMs
     {
         public int NumberOfSeats { get; set; }
         public DateTime Timestamp { get; set; }
+        public decimal TotalPrice { get; set; }
+
 
         public int MovieShowID { get; set; }
         public MovieShowVM MovieShow { get; set; }
         public string AppUserID { get; set; }
         public List<ShowSeatVM> ShowSeats { get; set; }
+
     }
 }

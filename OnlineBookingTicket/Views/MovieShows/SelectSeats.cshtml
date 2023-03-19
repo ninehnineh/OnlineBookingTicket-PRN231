@@ -4,7 +4,14 @@
 <head>
     <title>Cinema Hall</title>
     <style>
-        .center-screen {
+        .center-screen-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .center-screen-table {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -36,51 +43,131 @@
 <body>
     <h1>Select Seats</h1>
     <hr>
-    <div class="center-screen">
+    <div class="center-screen-screen">
         <h3>Screen</h3>
     </div>
     <form action="@Url.Action("BookMovieShow", "MovieShows")" method="post">
         <input type="hidden" name="movieShowId" value="@ViewBag.MovieShowId" />
         <input type="hidden" name="cinemaHallId" value="@ViewBag.cinemaHallId" />
-        <table class="center-screen" action="">
-            <column>
+        <input type="hidden" name="dateShow" value="@ViewBag.dateShows" />
 
-        @for (int i = 1; i <= 50; i++)
-        {
+        <table class="center-screen-table" action="">
+            <tbody>
+                    @for (int i = 1; i <= ViewBag.TotalSeats; i++)
+                    {
 
-            if (i % 5 == 1)
-            {
-               @:<row>
-                    @:<tr>
+                        if (i % 5 == 1)
+                        {
+                           @:<row>
+                                @:<tr>
                 
-            }
-            <td>
-               <input type="checkbox" id="A@(i)" name="seatSelection" value="@i">
-               <label for="A@(i)">A@(i)</label>
-            </td>
-            if (i % 5 == 0 || i == 50)
-            {
+                        }
+                        
+                        <td>
+                           <div>
+                               <input type="checkbox" id="A@(i)" name="seatSelection" value="@i">
+                               <label for="A@(i)">A@(i)</label>
+                           </div>
+                        </td>
+                        if (i % 5 == 0 || i == 50)
+                        {
                 
-                    @:</tr>
-               @:</row>
-            }
-        }
-            </column>
+                                @:</tr> 
+                           @:</row>
+                        }
+                    }
+
+            </tbody>
+                    <td>
+                        <div id="total-price">
+                            Total price: $<span id="total-price-display">0</span>
+                            <input type="hidden" name="totalPrice" id="total-Price-Input" value="0" />
+                        </div>
+                    </td>
+            <tfoot>
+                <tr>
+                    <td>
+                        <label style="background-color:green" >A1:</label>
+                        <label>Unavailable</label>
+                    </td>
+                    <td>
+                        <label >A1:</label>
+                        <label>Available</label>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
-        <button type="submit" class="btn btn-primary">Book</button>
+
+        <div id="btn-Book-Back">
+            <button id="book-btn" disabled type="submit" class="btn btn-primary">Book</button>
+            <a asp-action="Index" asp-controller="Movies">Back</a>
+        </div>
    </form>
 </body>
 </html>
 @section Scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        var seatButtons = document.querySelectorAll(".seat-button");
-
-        // Add event listeners to each seat button
-        seatButtons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            // Toggle the "selected" class of the clicked button
-            button.classList.toggle("selected");
-          });
+        $(document).ready(function() {
+            for (let i = 1; i <= 50; i++) {
+                getCinemaSeat(@(ViewBag.cinemaHallId), i, @(ViewBag.MovieShowId)).then(function(cinemaSeat) {
+                    if (cinemaSeat != null) {
+                        $('#A' + i).prop('disabled', true);
+                        $('#A' + i).closest('div').addClass('disabled-seat');
+                    }
+                }).catch(function(error) {
+                    console.log('Error: ' + error);
+                });
+            }
         });
+
+        function getCinemaSeat(cinemaHallID, seatNumber, movieShowId) {
+            return new Promise(function(resolve, reject) {
+                var url = `https://localhost:7099/getShowSeatByMovieShowID/${movieShowId}`;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(cinemaSeats) {
+                        console.log(cinemaSeats);
+                        var cinemaSeat = cinemaSeats.find(cs => cs.cinemaSeat.seatNumber === seatNumber);
+                        resolve(cinemaSeat);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        reject(errorThrown);
+                    }
+                });
+            });
+        }
+
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener('change', function() {
+                updateTotalPrice();
+            var bookBtn = document.getElementById('book-btn');
+            if (this.checked) {
+                bookBtn.disabled = false;
+            } else {
+                // Kiểm tra xem còn ô checkbox nào được chọn hay không
+                var checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                if (checkedBoxes.length === 0) {
+                    bookBtn.disabled = true;
+                }
+            }
+        });
+
+
+    }
+    function updateTotalPrice() {
+        var totalPrice = 0;
+        var checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        for (var i = 0; i < checkedBoxes.length; i++) {
+            totalPrice += parseFloat(@(ViewBag.Price)); // thay chỗ này thành price mà manager tạo khi lên lịch chiếu
+        }
+        document.getElementById('total-price-display').innerHTML = totalPrice;
+        document.getElementById('total-Price-Input').value = totalPrice;
+    }
     </script>
+
 }
+

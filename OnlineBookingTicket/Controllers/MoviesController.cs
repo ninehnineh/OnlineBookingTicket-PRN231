@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnlineBookingTicket.Contracts;
+using OnlineBookingTicket.Models.BookingVMs;
 using OnlineBookingTicket.Models.MovieShowVMs;
 using OnlineBookingTicket.Models.MovieVMs;
 using OnlineBookingTicket.Services;
@@ -10,6 +11,7 @@ using System.Composition.Convention;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace OnlineBookingTicket.Controllers
 {
@@ -17,18 +19,15 @@ namespace OnlineBookingTicket.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorageService;
-        private readonly IHostingEnvironment _environment;
         private string apiUrl = "";
 
         public MoviesController(IHttpContextAccessor httpContextAccessor,
-            ILocalStorageService localStorageService,
-            IHostingEnvironment environment)
+            ILocalStorageService localStorageService)
         {
             _httpClient = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _httpClient.DefaultRequestHeaders.Accept.Add(contentType);
             _localStorageService = localStorageService;
-            _environment = environment;
             var token = new BaseHttpService(_localStorageService, _httpClient);
             token.AddBearerToken();
         }
@@ -89,8 +88,19 @@ namespace OnlineBookingTicket.Controllers
                 ReleaseDate = (DateTime)temp["releaseDate"],
                 MovieShows = (List<MovieShowVM>)temp["movieShows"].ToObject<List<MovieShowVM>>(),
             };
-            
+            //var a = await GetBookingAsync(GetAuthenticatedUserId());
+            //ViewBag.UserID = GetAuthenticatedUserId();
+            //ViewBag.MovieShowID = a.MovieShowID;
             return View(movie);
+        }
+
+        private string GetAuthenticatedUserId()
+        {
+            var authenticatedUser = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "uid").ToString();
+
+            var userId = authenticatedUser.Contains("uid") ?
+                authenticatedUser.Substring(authenticatedUser.IndexOf(":") + 1).TrimStart() : authenticatedUser;
+            return userId;
         }
 
         public async Task<string> GetImage(int id)
@@ -103,14 +113,35 @@ namespace OnlineBookingTicket.Controllers
             if (!response.IsSuccessStatusCode)
             {
                 TempData["Message"] = "Error while calling API";
+            }
+
+            var data = await response.Content.ReadAsStringAsync();
+
+            return data;
+        }
+
+        private async Task<BookingVM> GetBookingAsync(string userId)
+        {
+            apiUrl = "https://localhost:7099/odata/Bookings?userId=";
+            string query = $"{userId}";
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"{apiUrl}{query}");
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Message"] = "Error while calling API";
                 //return View();
             }
 
             var data = await response.Content.ReadAsStringAsync();
 
-            //var a = Path.Combine(Directory.GetCurrentDirectory(), $"..\\OnlineBookingTicketAPI\\UploadFile\\{data}");
-            //var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"..\UploadFile", data);
-            return data;
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var booking = JsonSerializer.Deserialize<BookingVM>(data, options);
+
+            return booking;
         }
     }
 }
