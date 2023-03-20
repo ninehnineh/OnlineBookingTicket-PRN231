@@ -10,6 +10,8 @@ namespace BusinessObject.Entities
         public decimal Price { get; set; }
 
         public int BookingID { get; set; }
+        [JsonIgnore]
+
         public Booking Booking { get; set; }
         public int MovieShowID { get; set; }
         [JsonIgnore]

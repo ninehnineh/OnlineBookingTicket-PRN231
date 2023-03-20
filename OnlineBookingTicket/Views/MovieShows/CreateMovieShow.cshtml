@@ -3,25 +3,24 @@
 @{
     ViewData["Title"] = "CreateMovieShow";
     Layout = null;
-    var titleList = (SelectList)ViewData["TitleList"];
     var durationList = (SelectList)ViewData["DurationList"];
 }
 <html>
-    <head>
-        
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<head>
 
-    </head>
-    <body>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
     <h1>CreateMovieShow</h1>
 
     <h4>MovieShow</h4>
@@ -46,18 +45,26 @@
                     <input asp-for="Endtime" class="form-control" disabled />
                     <span asp-validation-for="Endtime" class="text-danger" id="Endtime"></span>
                 </div>
-                <div class ="form-group">
-                    @Html.Label("Movie Title:")
-                    @Html.DropDownList("MovieTitle", titleList, "--Select a title--" ,new { id = "TitleSelect" })
-                </div>
-
+                @*<div class ="form-group">
+                @Html.Label("Movie Title:")
+                @Html.DropDownList("TitleList",  ViewData["TitleList"] as SelectList,new { @class = "form-control" })
+                </div>*@
                 <div class="form-group">
-                    @Html.Label("Movie Duration:")
-                    @Html.DropDownList("MovieDuration", durationList,  "--Select a title--",new { id = "DurationSelect", disabled = "disabled"})
+                    <label asp-for="MovieID" class="control-label"></label>
+                    <select asp-for="MovieID" asp-items="ViewBag.TitleList" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label"></label>
+                    <select id="DurationSelect" asp-items="ViewBag.DurationList" class="form-control" disabled></select>
                 </div>
                 <div class="form-group">
                     <label asp-for="CinemaHallID" class="control-label"></label>
                     <select asp-for="CinemaHallID" class="form-control" asp-items="ViewBag.CinemaHallID"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
@@ -72,9 +79,9 @@
 
     <script type="text/javascript">
         $(function () {
-            $("#TitleSelect").change(function () {
+            $("#MovieID").change(function () {
                 var titleId = $(this).val();
-                $("#DurationSelect").val(titleId);
+                $("#DurationSelect").val(titleId).text();
             });
         });
 
@@ -84,10 +91,11 @@
             console.log(parseInt($("#DurationSelect option:selected").text()));
             // Thời gian duration tính theo phút
             var end = moment(start, 'HH:mm').add(duration, 'minutes').format('HH:mm');
+            console.log(end);
             $('#Endtime').val(end);
         });
     </script>
-    </body>
+</body>
 
 </html>
 
@@ -103,5 +111,7 @@
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

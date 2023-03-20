@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessObject.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -41,57 +42,39 @@ namespace OnlineBookingTicket.Controllers
             apiUrl = "https://localhost:7099/odata/MovieShows";
             string query = $"?$select=Date,Starttime,Endtime,MovieID,CinemaID,Id";
 
-            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7099/odata/MovieShows");
+            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7099/movieshow");
+            string strData = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode)
+            var options = new JsonSerializerOptions
             {
-                TempData["Message"] = "Error while calling API";
-                return View();
-            }
-            var data = await response.Content.ReadAsStringAsync();
-
-            dynamic temp = JObject.Parse(data);
-
-            var movieShows = ((JArray)temp.value).Select(x => new ListMovieShowVM
-            {
-                Id = (int)x["Id"],
-                Date = (DateTime)x["Date"],
-                Starttime = (DateTime)x["Starttime"],
-                Endtime = (DateTime)x["Endtime"],
-                CinemaHallID = (int)x["CinemaHallID"],
-                MovieID = (int)x["MovieID"],
-
-            }).ToList();
+                PropertyNameCaseInsensitive = true
+            };
+            List<MovieShow> movieShows = JsonSerializer.Deserialize<List<MovieShow>>(strData, options);
             HttpResponseMessage responses = await _httpClient.GetAsync("https://localhost:7099/odata/Movies");
-            string strData = await responses.Content.ReadAsStringAsync();
+            string strDatas = await responses.Content.ReadAsStringAsync();
 
 
-            dynamic tempss = JObject.Parse(strData);
+            dynamic temps = JObject.Parse(strDatas);
 
-            var movies = ((JArray)tempss.value).Select(x => new ListMovieVM
+            var movies = ((JArray)temps.value).Select(x => new ListMovieVM
             {
                 Id = (int)x["Id"],
                 Title = (string)x["Title"],
             }).ToList();
-
-            ViewBag.Movies = movies;
+            ViewData["MovieID"] = new SelectList(movies, "Id", "Title");
 
 
             HttpResponseMessage responseMessages = await _httpClient.GetAsync("https://localhost:7099/odata/CinemaHalls");
             string stringDatas = await responseMessages.Content.ReadAsStringAsync();
-            JToken token = JToken.Parse(stringDatas);
-            JArray cinemaHallAray = (JArray)token.SelectToken("value");
-            List<CinemaHallVM> cinemaHalls = new List<CinemaHallVM>();
-            foreach (JToken cinemaHall in cinemaHallAray)
-            {
-                CinemaHallVM cinemaHallVM = new CinemaHallVM
-                {
-                    Name = (string)cinemaHall["Name"],
-                };
-                cinemaHalls.Add(cinemaHallVM);
-            }
+            dynamic tempss = JObject.Parse(stringDatas);
 
-            ViewBag.CinemaHalls = cinemaHalls;  
+            var cinemaHalls = ((JArray)tempss.value).Select(x => new ListCinemaHallVM
+            {
+                Id = (int)x["Id"],
+                Name = (string)x["Name"],
+            }).ToList();
+
+            ViewData["CinemaHallID"] = new SelectList(cinemaHalls, "Id", "Name");
 
             return View(movieShows);
 
@@ -127,7 +110,7 @@ namespace OnlineBookingTicket.Controllers
                 };
                 cinemaSeatsId.Add(CreateCinemaSeats(cinemaSeat).Result.Value);
             }
-            
+
             string userId = GetAuthenticatedUserId();
 
             var bookingVM = new CreateBookingVM
@@ -157,7 +140,7 @@ namespace OnlineBookingTicket.Controllers
             }
 
             TempData["Message"] = "Book Successful";
-            return RedirectToAction("Index","Movies");
+            return RedirectToAction("Index", "Movies");
         }
         private async Task<ActionResult<CreateCinemaSeatResponseVM>> CreateCinemaSeats(CreateCinemaSeatVM cinemaSeat)
         {
@@ -180,7 +163,7 @@ namespace OnlineBookingTicket.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = "Insert successfully!";
-                    return new CreateCinemaSeatResponseVM { Id = cinemaSeatId };       
+                    return new CreateCinemaSeatResponseVM { Id = cinemaSeatId };
                 }
                 else
                 {
@@ -275,10 +258,8 @@ namespace OnlineBookingTicket.Controllers
 
             var titleList = new SelectList(movies, "Id", "Title");
             var durationList = new SelectList(movies, "Id", "DurationInMinutes");
-
             ViewData["TitleList"] = titleList;
             ViewData["DurationList"] = durationList;
-
 
 
             HttpResponseMessage responseMessages = await _httpClient.GetAsync("https://localhost:7099/odata/CinemaHalls");
@@ -296,7 +277,7 @@ namespace OnlineBookingTicket.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateMovieShow([Bind("Id,Date,Starttime,Endtime,MovieID,CinemaHallID")] CreateMovieShowVM createMovieShowVM)
+        public async Task<ActionResult> CreateMovieShow(CreateMovieShowVM createMovieShowVM)
         {
             HttpResponseMessage responses = await _httpClient.GetAsync("https://localhost:7099/odata/Movies");
             string strDatas = await responses.Content.ReadAsStringAsync();
@@ -314,39 +295,30 @@ namespace OnlineBookingTicket.Controllers
             apiUrl = "https://localhost:7099/odata/MovieShows";
             if (ModelState.IsValid)
             {
-                var movie = movies.FirstOrDefault(x => x.Id == createMovieShowVM.MovieID);
-                createMovieShowVM.Endtime.AddMinutes(createMovieShowVM.Starttime.Minute + movie.DurationInMinutes);
                 string strData = JsonSerializer.Serialize(createMovieShowVM);
                 var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, contentData);
-                int time = DateTime.Compare(createMovieShowVM.Endtime,createMovieShowVM.Starttime);
-                int result = createMovieShowVM.Endtime.Hour - createMovieShowVM.Starttime.Hour; 
+                int result = createMovieShowVM.Endtime.Hour - createMovieShowVM.Starttime.Hour;
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = "Insert successfully!";
                     return RedirectToAction(nameof(Index));
 
                 }
-                else if(time == 0)
-                {
-                    ViewBag.Message = "Error start is the same time as endtime";
-                }
-                else if(time < 0)
-                {
-                    ViewBag.Message = "Error start is earlier than endtime";
-                }else if(result <= 1)
-                {
-                    ViewBag.Message = "Too Short";
-                }    
+                
+               
+               
                 else
                 {
                     ViewBag.Message = "Error while calling WebAPI!";
                 }
             }
             #region Movie List
-          
-            ViewData["Duration"] = new SelectList(movies, "Id", "DurationInMinutes");
-            ViewData["MovieID"] = new SelectList(movies, "Id", "Title");
+
+            var titleList = new SelectList(movies, "Id", "Title");
+            var durationList = new SelectList(movies, "Id", "DurationInMinutes");
+            ViewData["TitleList"] = titleList;
+            ViewData["DurationList"] = durationList;
 
             #endregion
 

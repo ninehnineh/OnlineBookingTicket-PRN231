@@ -25,7 +25,12 @@ namespace DataAccess.DAO
 
         public async Task<List<MovieShow>> GetAllAsync()
         {
-            return await _context.MovieShows.ToListAsync();
+            var movieShows = await  _context.MovieShows.Include(a => a.Movie).Include(y => y.CinemaHall).ToListAsync();
+
+
+
+
+            return movieShows;
         }
 
         public async Task<IQueryable<MovieShow>> GetMovieShowsAsync()
@@ -35,8 +40,8 @@ namespace DataAccess.DAO
                 .Include(z => z.ShowSeats)
                 .Include(y => y.CinemaHall)
                 .ThenInclude(x => x.CinemaSeats);
-                
-                
+
+
             return movieShows;
         }
 
@@ -85,69 +90,81 @@ namespace DataAccess.DAO
 
         public async Task<MovieShow> CreateMovieShowAsync(CreateMovieShowDto movieShowDto)
         {
-           
+
             var listMovieShow = await GetMovieShowsAsync();
             MovieShow movieShow = _mapper.Map<MovieShow>(movieShowDto);
-            var checkDate = listMovieShow.FirstOrDefault(x => x.Date.Date == movieShowDto.Date.Date);
-            var checkStartTime = listMovieShow.FirstOrDefault(x => x.Starttime == movieShowDto.Starttime);
-            var checkStartTimeEqualEndTime = listMovieShow.FirstOrDefault(x => x.Endtime == movieShowDto.Starttime);
-            var checkEndTime = listMovieShow.FirstOrDefault(x => x.Starttime == movieShowDto.Endtime);
-            var checkEndTimeEqualStartTime = listMovieShow.FirstOrDefault(x => x.Endtime == movieShowDto.Endtime);
-            int result = movieShowDto.Endtime.Hour - movieShowDto.Starttime.Hour;
-            int time = DateTime.Compare(movieShowDto.Endtime, movieShowDto.Starttime);
-            if (movieShowDto.Starttime >= movieShowDto.Endtime)
+            var movies = await _context.Movies
+                .Include(x => x.MovieShows).ToListAsync();
+            var movie = movies.FirstOrDefault(x => x.Id == movieShow.MovieID);
+            if (movie == null)
             {
-                throw new BadRequestException("Error time");
-            }
-            else if (time == 0)
-            {
-                throw new BadRequestException("Error start is the same time as endtime");
-            }
-            else if (time < 0)
-            {
-                throw new BadRequestException("Error start is earlier than endtime");
-            }
-            else if (result <= 1)
-            {
-                throw new BadRequestException("Too Short");
+                throw new BadRequestException("Not found movie");
             }
             else
             {
-                if (checkDate != null)
+                var checkDate = listMovieShow.FirstOrDefault(x => x.Date.Date == movieShowDto.Date.Date);
+                var checkStartTime = listMovieShow.FirstOrDefault(x => x.Starttime == movieShowDto.Starttime);
+                var checkStartTimeEqualEndTime = listMovieShow.FirstOrDefault(x => x.Endtime == movieShowDto.Starttime);
+                var checkEndTime = listMovieShow.FirstOrDefault(x => x.Starttime == movieShowDto.Endtime);
+                var checkEndTimeEqualStartTime = listMovieShow.FirstOrDefault(x => x.Endtime == movieShowDto.Endtime);
+                int result = movieShowDto.Endtime.Hour - movieShowDto.Starttime.Hour;
+                int time = DateTime.Compare(movieShowDto.Endtime, movieShowDto.Starttime);
+                if (movieShowDto.Starttime >= movieShowDto.Endtime)
                 {
-                    if (checkStartTime != null || checkStartTimeEqualEndTime != null || checkEndTime != null || checkEndTimeEqualStartTime != null)
+                    throw new BadRequestException("Error time");
+                }
+                else if (time == 0)
+                {
+                    throw new BadRequestException("Error start is the same time as endtime");
+                }
+                else if (time < 0)
+                {
+                    throw new BadRequestException("Error start is earlier than endtime");
+                }
+                else if (result < 1)
+                {
+                    throw new BadRequestException("Too Short");
+                }
+                else
+                {
+                    if (checkDate != null)
                     {
+                        if (checkStartTime != null || checkStartTimeEqualEndTime != null || checkEndTime != null || checkEndTimeEqualStartTime != null)
+                        {
                             throw new BadRequestException("Error time");
 
-                    }
-                    else
-                    {
-                        foreach (var item in listMovieShow)
-                        {
-                            if(item.Date.Date == checkDate.Date.Date)
-                            {
-                            if (movieShowDto.Starttime <= item.Endtime && movieShowDto.Starttime >= item.Starttime)
-                            {
-                                throw new BadRequestException("Error time");
-
-                            }
-                            else if (movieShowDto.Endtime <= item.Endtime && movieShowDto.Endtime >= item.Starttime)
-                            {
-                                throw new BadRequestException("Error time");
-
-                            }
                         }
+                        else
+                        {
+                            foreach (var item in listMovieShow)
+                            {
+                                if (item.Date.Date == checkDate.Date.Date)
+                                {
+                                    if (movieShowDto.Starttime <= item.Endtime && movieShowDto.Starttime >= item.Starttime)
+                                    {
+                                        throw new BadRequestException("Error time");
+
+                                    }
+                                    else if (movieShowDto.Endtime <= item.Endtime && movieShowDto.Endtime >= item.Starttime)
+                                    {
+                                        throw new BadRequestException("Error time");
+
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-            }
-            await _context.MovieShows.AddAsync(movieShow);
-            await _context.SaveChangesAsync();
-               
-            return movieShow;
-            }
-            
-        }
-    }
 
+                movieShow.Endtime = movieShow.Starttime.AddMinutes(movie.DurationInMinutes);
+                await _context.MovieShows.AddAsync(movieShow);
+                await _context.SaveChangesAsync();
+
+            }
+
+            return movieShow;
+        }
+
+    }
+}
 

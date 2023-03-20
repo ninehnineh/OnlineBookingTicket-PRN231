@@ -1,5 +1,4 @@
-﻿@using BusinessObject.Entities
-@model IEnumerable<OnlineBookingTicket.Models.MovieShowVMs.ListMovieShowVM>
+﻿@model IEnumerable<BusinessObject.Entities.MovieShow>
 
 @{
     ViewData["Title"] = "Index";
@@ -25,10 +24,13 @@
                 @Html.DisplayNameFor(model => model.Endtime)
             </th>
             <th>
+                Price
+            </th>
+            <th>
                 Cinema Hall Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MovieID)
+                Movie Title
             </th>
             <th></th>
         </tr>
@@ -36,8 +38,8 @@
     <tbody>
         @foreach (var item in Model)
         {
-           
-                      
+
+
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
@@ -49,18 +51,13 @@
                     @Html.DisplayFor(modelItem => item.Endtime)
                 </td>
                 <td>
-                    @foreach (var cinemaHall in ViewBag.CinemaHalls)
-                    {
-                        <p>@cinemaHall.Name</p>
-                    }
-                     
-                   
+                    @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    @foreach (var movie in ViewBag.Movies)
-                    {
-                        <p>@movie.Title</p>
-                    }
+                    <select asp-for="@item.CinemaHallID" class="form-control" asp-items="ViewBag.CinemaHallID" disabled></select>
+                </td>
+                <td>
+                    <select asp-for="@item.MovieID" class="form-control" asp-items="ViewBag.MovieID" disabled></select>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -71,3 +68,4 @@
         }
     </tbody>
 </table>
+

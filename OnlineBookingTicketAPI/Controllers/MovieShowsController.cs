@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Repository.IRepository;
+using Repository.MovieRepository;
 using Repository.MovieShowRepository;
 using Repository.ServiceResponse;
 
@@ -16,12 +17,14 @@ namespace OnlineBookingTicketAPI.Controllers
     public class MovieShowsController : ODataController
     {
         IMovieShowRepository repository;
+        IMovieRepository movieRepository;
         private readonly IMapper _mapper;
 
-        public MovieShowsController(IMovieShowRepository movieShowRepository, IMapper mapper)
+        public MovieShowsController(IMovieShowRepository movieShowRepository, IMapper mapper,IMovieRepository movie)
         {
             this.repository = movieShowRepository;
             this._mapper = mapper;
+            this.movieRepository = movie;
         }
 
 
@@ -45,57 +48,43 @@ namespace OnlineBookingTicketAPI.Controllers
 
             var movieShows = await repository.GetMovieShowsAsync();
             var checkDate = movieShows.FirstOrDefault(x => x.Date == movieShowDto.Date);
-            var checkStartTime =  movieShows.FirstOrDefault(x => x.Starttime == movieShowDto.Starttime);
-            var checkStartTimeEqualEndTime =  movieShows.FirstOrDefault(x => x.Endtime == movieShowDto.Starttime);
-            var checkEndTime =  movieShows.FirstOrDefault(x => x.Starttime == movieShowDto.Endtime);
-            var checkEndTimeEqualStartTime =  movieShows.FirstOrDefault(x => x.Endtime == movieShowDto.Endtime);
-            int result = movieShowDto.Endtime.Hour - movieShowDto.Starttime.Hour;
-            int time = DateTime.Compare(movieShowDto.Endtime, movieShowDto.Starttime);
-            if (movieShowDto.Starttime >= movieShowDto.Endtime)
+            var movies = await movieRepository.GetMoviesAsync();
+            var movie = movies.FirstOrDefault(x => x.Id == movieShowDto.MovieID);
+            if(movie == null)
             {
-                return BadRequest("Error time");
-            }
-            else if (time == 0)
-            {
-                BadRequest("Error start is the same time as endtime");
-            }
-            else if (time < 0)
-            {
-                BadRequest("Error start is earlier than endtime");
-            }
-            else if (result <= 1)
-            {
-                BadRequest("Too Short");
+                return BadRequest("Movie Not Found");
+
             }
             else
             {
-                if(checkDate != null)
+                movieShowDto.Endtime = movieShowDto.Starttime.AddMinutes(movie.DurationInMinutes);
+              
+                
+                if (checkDate != null)
                 {
-                    if (checkStartTime != null || checkStartTimeEqualEndTime != null || checkEndTime != null || checkEndTimeEqualStartTime != null)
-                    {
-                        return BadRequest("Error time");
 
-                    }
-                    else 
+                    foreach (var item in movieShows)
                     {
-                        foreach (var item in movieShows)
+                        if (movieShowDto.Starttime <= item.Endtime && movieShowDto.Starttime >= item.Starttime)
                         {
-                            if(movieShowDto.Starttime <= item.Endtime && movieShowDto.Starttime >= item.Starttime)
-                            {
-                                return BadRequest("Error time");
+                            return BadRequest("Error time");
 
-                            }else if(movieShowDto.Endtime <= item.Endtime && movieShowDto.Endtime >= item.Starttime)
-                            {
-                                return BadRequest("Error time");
+                        }
+                        else if (movieShowDto.Endtime <= item.Endtime && movieShowDto.Endtime >= item.Starttime)
+                        {
+                            return BadRequest("Error time");
 
-                            }
                         }
                     }
+
                 }
+                
+                await repository.AddMovieShow(movieShowDto);
+                var model = _mapper.Map<MovieShow>(movieShowDto);
+                return Created(model);
             }
-            await repository.AddMovieShow(movieShowDto);
-            var model = _mapper.Map<MovieShow>(movieShowDto);
-            return Created(model);
+            
+            
         }
 
         [EnableQuery]
@@ -127,6 +116,15 @@ namespace OnlineBookingTicketAPI.Controllers
         public async Task<ActionResult> Get()
         {
             var movieShows = await repository.GetMovieShowsAsync();
+            return Ok(movieShows);
+        }
+
+        [HttpGet("movieshow")]
+        [EnableQuery]
+
+        public async Task<ActionResult> GetMovieShow()
+        {
+            var movieShows = await repository.GetMovieShows();
             return Ok(movieShows);
         }
     }
