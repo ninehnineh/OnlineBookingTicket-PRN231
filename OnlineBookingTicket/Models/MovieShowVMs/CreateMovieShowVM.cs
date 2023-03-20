@@ -15,6 +15,7 @@ namespace OnlineBookingTicket.Models.MovieShowVMs
         [DataType(DataType.Time)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:hh\\:mm}")]
         public DateTime Endtime { get; set; }
+        public decimal Price { get; set; }
 
         public int MovieID { get; set; }
         public int CinemaHallID { get; set; }
