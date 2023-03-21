@@ -60,7 +60,7 @@ namespace OnlineBookingTicket.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Movies");
                 }
             }
             else
@@ -105,7 +105,7 @@ namespace OnlineBookingTicket.Controllers
             await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             //HttpContext.Session.Clear();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
 
         public IActionResult Register()

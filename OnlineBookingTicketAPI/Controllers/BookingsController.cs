@@ -2,6 +2,7 @@
 using BusinessObject.Entities;
 using DTO.Booking;
 using DTO.CinemaHall;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -11,7 +12,8 @@ using Repository.CinemaHallRepository;
 
 namespace OnlineBookingTicketAPI.Controllers
 {
-    
+    [Authorize]
+
     public class BookingsController : ODataController
     {
         IBookingRepository repository;
