@@ -2,6 +2,7 @@
 using BusinessObject.Entities;
 using DTO.Cinema;
 using DTO.MovieShow;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -13,7 +14,8 @@ using Repository.ServiceResponse;
 
 namespace OnlineBookingTicketAPI.Controllers
 {
-  
+    [Authorize]
+
     public class MovieShowsController : ODataController
     {
         IMovieShowRepository repository;
