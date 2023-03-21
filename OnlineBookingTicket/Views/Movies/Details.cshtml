@@ -91,8 +91,12 @@
                 <tbody>
                     @foreach (var movieShow in Model.MovieShows)
                     {
+
+                      
+
                         var showDate =movieShow.Date;
                         var currentDate = DateTime.Now;
+
                         @if (showDate >= currentDate)
                         {
                             <tr>
