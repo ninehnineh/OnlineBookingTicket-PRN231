@@ -38,11 +38,9 @@
     <tbody>
         @foreach (var item in Model)
         {
-
-
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date.Date)
+                    @item.Date.ToString("dd/MM/yyyy")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Starttime.TimeOfDay)

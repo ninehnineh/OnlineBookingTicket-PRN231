@@ -64,14 +64,14 @@ namespace OnlineBookingTicket.Controllers
             ViewData["MovieID"] = new SelectList(movies, "Id", "Title");
 
 
-            HttpResponseMessage responseMessages = await _httpClient.GetAsync("https://localhost:7099/odata/CinemaHalls");
-            string stringDatas = await responseMessages.Content.ReadAsStringAsync();
-            dynamic tempss = JObject.Parse(stringDatas);
+            responses = await _httpClient.GetAsync("https://localhost:7099/odata/CinemaHalls");
+            strDatas = await responses.Content.ReadAsStringAsync();
+            temps = JObject.Parse(strDatas);
 
-            var cinemaHalls = ((JArray)tempss.value).Select(x => new ListCinemaHallVM
+            var cinemaHalls = ((JArray)temps.value).Select(a => new ListCinemaHallVM
             {
-                Id = (int)x["Id"],
-                Name = (string)x["Name"],
+                Id = (int)a["Id"],
+                Name = (string)a["Name"],
             }).ToList();
 
             ViewData["CinemaHallID"] = new SelectList(cinemaHalls, "Id", "Name");
@@ -465,6 +465,31 @@ namespace OnlineBookingTicket.Controllers
                 MovieID = (int)temp["MovieID"],
                 CinemaHallID = (int)temp["CinemaHallID"],
             };
+            HttpResponseMessage responses = await _httpClient.GetAsync("https://localhost:7099/odata/Movies");
+            string strDatas = await responses.Content.ReadAsStringAsync();
+
+
+            dynamic temps = JObject.Parse(strDatas);
+
+            var movies = ((JArray)temps.value).Select(x => new ListMovieVM
+            {
+                Id = (int)x["Id"],
+                Title = (string)x["Title"],
+            }).ToList();
+            ViewData["MovieID"] = new SelectList(movies, "Id", "Title");
+
+
+            responses = await _httpClient.GetAsync("https://localhost:7099/odata/CinemaHalls");
+            strDatas = await responses.Content.ReadAsStringAsync();
+            temps = JObject.Parse(strDatas);
+
+            var cinemaHalls = ((JArray)temps.value).Select(a => new ListCinemaHallVM
+            {
+                Id = (int)a["Id"],
+                Name = (string)a["Name"],
+            }).ToList();
+
+            ViewData["CinemaHallID"] = new SelectList(cinemaHalls, "Id", "Name");
 
             if (movieshow == null)
             {

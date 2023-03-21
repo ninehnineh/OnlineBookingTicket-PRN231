@@ -137,7 +137,15 @@ namespace DataAccess.DAO
                             }
                         }
                     }
-                
+                    else if (movieShow.Date < DateTime.Now)
+                    {
+                        throw new BadRequestException("Error Date");
+                    }
+                DateTime newStartTime = movieShow.Starttime;
+                movieShow.Starttime = new DateTime(movieShow.Date.Year, movieShow.Date.Month, movieShow.Date.Day, newStartTime.Hour, newStartTime.Minute, newStartTime.Second);
+                DateTime newEndTimeTime = movieShow.Endtime;
+
+                movieShow.Endtime = new DateTime(movieShow.Date.Year, movieShow.Date.Month, movieShow.Date.Day, newEndTimeTime.Hour, newEndTimeTime.Minute, newEndTimeTime.Second);
                 movieShow.Endtime = movieShow.Starttime.AddMinutes(movie.DurationInMinutes);
                 await _context.MovieShows.AddAsync(movieShow);
                 await _context.SaveChangesAsync();

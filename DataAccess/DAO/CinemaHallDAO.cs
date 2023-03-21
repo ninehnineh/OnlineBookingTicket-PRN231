@@ -25,7 +25,7 @@ namespace DataAccess.DAO
 
         public async Task<List<CinemaHall>> GetAllAsync()
         {
-            return await _context.CinemaHalls.ToListAsync();
+            return await _context.CinemaHalls.Include(x => x.MovieShows).Include(x => x.CinemaSeats).ToListAsync();
         }
         public async Task<CinemaHall> GetCinemaHallByIdAsync(int id)
         {

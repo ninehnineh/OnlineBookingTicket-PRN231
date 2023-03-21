@@ -1,10 +1,13 @@
 ﻿using BusinessObject.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineBookingTicket.Models.MovieShowVMs
 {
     public class ListMovieShowVM
     {
         public int Id { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",
+             ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
         public DateTime Starttime { get; set; }
         public DateTime Endtime { get; set; }
