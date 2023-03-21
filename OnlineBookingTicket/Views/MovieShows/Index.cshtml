@@ -42,13 +42,13 @@
 
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date)
+                    @Html.DisplayFor(modelItem => item.Date.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Starttime)
+                    @Html.DisplayFor(modelItem => item.Starttime.TimeOfDay)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Endtime)
+                    @Html.DisplayFor(modelItem => item.Endtime.TimeOfDay)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)

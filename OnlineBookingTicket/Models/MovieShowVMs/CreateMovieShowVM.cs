@@ -5,7 +5,7 @@ namespace OnlineBookingTicket.Models.MovieShowVMs
     public class CreateMovieShowVM
     {
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-dd-MM}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
         [DataType(DataType.Time)]

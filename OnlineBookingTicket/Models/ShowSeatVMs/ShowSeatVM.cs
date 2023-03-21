@@ -14,7 +14,6 @@ namespace OnlineBookingTicket.Models.ShowSeatVMs
         public int MovieShowID { get; set; }
         public int CinemaSeatID { get; set; }
 
-        public int CinemaSeatId { get; set; }
         public CinemaSeatVM CinemaSeat { get; set; }
     }
 }
