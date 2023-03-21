@@ -12,7 +12,6 @@ namespace DTO.ShowSheat
     {
         public int Id { get; set; }
 
-    
         public CinemaSeatDto CinemaSeat { get; set; }
     }
 }

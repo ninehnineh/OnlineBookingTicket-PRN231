@@ -61,10 +61,10 @@ namespace OnlineBookingTicketAPI.Controllers
 
         [EnableQuery]
         [Authorize(Policy = "RequireAdminRole")]
-        public async Task<IActionResult> Post(IFormFile image, [FromForm] CreateMovieDto movieDto)
+        public async Task<IActionResult> Post(IFormFile file, [FromForm] CreateMovieDto movieDto)
         {
 
-            await _movieRepository.AddMovie(image,movieDto);
+            await _movieRepository.AddMovie(file, movieDto);
             var model = _mapper.Map<Movie>(movieDto);
 
             return Created(model);
