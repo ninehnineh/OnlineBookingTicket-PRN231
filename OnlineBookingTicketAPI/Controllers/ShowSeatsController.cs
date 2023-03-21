@@ -2,6 +2,7 @@
 using BusinessObject.Entities;
 using DTO.MovieShow;
 using DTO.ShowSheat;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -12,7 +13,7 @@ using Repository.ShowSeatRepository;
 
 namespace OnlineBookingTicketAPI.Controllers
 {
-    
+
     public class ShowSeatsController : ODataController
     {
         IShowSeatRepository repository;

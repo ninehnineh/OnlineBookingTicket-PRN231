@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DataAccess.DAO
 {
@@ -100,18 +101,15 @@ namespace DataAccess.DAO
             }
         } 
         
-        public async Task<Movie> CreateMovieAsyncV1(IFormFile image , CreateMovieDto movieDto)
+        public async Task<Movie> CreateMovieAsyncV1(IFormFile file, CreateMovieDto movieDto)
         {
             try
             {
                 Movie movie = _mapper.Map<Movie>(movieDto);
-                var mybytes = System.Text.Encoding.UTF8.GetBytes(image.FileName);
-                if (image != null)
+                if (file != null && file.Length > 0)
                 {
-                    var filePath = Path.Combine(_environment.ContentRootPath, @"..\OnlineBookingTicket\wwwroot\Image", image.FileName);
-                    using var fileStream = new FileStream(filePath, FileMode.Create);
-                    await image.CopyToAsync(fileStream);
-                    movie.Image = mybytes;
+                    await UploadImage(file);
+                    movie.Image = System.Text.Encoding.UTF8.GetBytes(file.FileName);
                 }
 
                 await _dbContext.Movies.AddAsync(movie);
@@ -125,5 +123,19 @@ namespace DataAccess.DAO
             }
         }
 
+        public async Task UploadImage(IFormFile file)
+        {
+            try
+            {
+                var filePath = Path.Combine(_environment.ContentRootPath, @"..\OnlineBookingTicket\wwwroot\Image", file.FileName);
+
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await file.CopyToAsync(stream);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
